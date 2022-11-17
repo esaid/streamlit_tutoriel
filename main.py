@@ -1,3 +1,5 @@
+import time
+
 import streamlit as st
 
 st.write("Hello ,let's learn how to build a streamlit app together")
@@ -16,6 +18,26 @@ st.multiselect('choose a planet',['Jupiter', 'Mars', 'neptune'])
 st.select_slider('Pick a mark', ['Bad', 'Good', 'Excellent'])
 st.slider('Pick a number', 0,60)
 
+st.number_input('Pick a number', 0,10)
+st.text_input('Email address')
+st.date_input('Travelling date')
+st.time_input('School time')
+st.text_area('Description')
+st.file_uploader('Upload a photo')
+st.color_picker('Choose your favorite color')
+
+st.balloons()
+st.progress(10)
+with st.spinner('Wait for it...'):
+    time.sleep(10)
 
 
+st.graphviz_chart('''
+    digraph {
+        Big_shark -> Tuna
+        Tuna -> Mackerel
+        Mackerel -> Small_fishes
+        Small_fishes -> Shrimp
+    }
+''')
 
