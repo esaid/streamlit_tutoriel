@@ -10,5 +10,11 @@ def load_lottiefile(filepath: str):
 
 cpu_file = "cpu.json"
 lottie_coding = load_lottiefile(cpu_file)
-st.title("CPU GA144")
-st_lottie.st_lottie(lottie_coding)
+original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">CPU GA144</p>'
+st.markdown(original_title, unsafe_allow_html=True)
+
+with st.sidebar:
+
+    st.markdown('<p style="font-family:Courier;  font-size: 25px;">MENU</p>', unsafe_allow_html=True)
+    st_lottie.st_lottie(lottie_coding, speed=0.5, height=200)
+
