@@ -3,6 +3,7 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 from streamlit_lottie import st_lottie_spinner
 from streamlit_option_menu import option_menu
+from streamlit_ace import st_ace
 
 
 def load_lottiefile(filepath: str):
@@ -33,5 +34,5 @@ selected3 = option_menu(None, ["Home", "Upload", "Tasks", 'Settings'],
                         }
                         )
 
-
-
+content = st_ace(language='forth', theme='cobalt', font_size=25)
+content
