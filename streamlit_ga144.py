@@ -1,6 +1,8 @@
 import json
 import streamlit as st
-import streamlit_lottie as st_lottie
+from streamlit_lottie import st_lottie
+from streamlit_lottie import st_lottie_spinner
+from streamlit_option_menu import option_menu
 
 
 def load_lottiefile(filepath: str):
@@ -14,7 +16,5 @@ original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">
 st.markdown(original_title, unsafe_allow_html=True)
 
 with st.sidebar:
-
     st.markdown('<p style="font-family:Courier;  font-size: 25px;">MENU</p>', unsafe_allow_html=True)
     st_lottie.st_lottie(lottie_coding, speed=0.5, height=200)
-
