@@ -1,6 +1,19 @@
 import time
-
+import json
 import streamlit as st
+from streamlit_lottie import st_lottie
+
+
+def load_lottiefile(filepath: str):
+    with open(filepath, "r") as f:
+        return json.load(f)
+
+
+cpu_file = "cpu.json"
+lottie_coding = load_lottiefile(cpu_file)
+
+st_lottie(lottie_coding, speed=0.5, height=200)
+
 
 st.write("Hello ,let's learn how to build a streamlit app together")
 st.title ("this is the app title")
