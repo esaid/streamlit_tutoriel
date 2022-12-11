@@ -36,11 +36,17 @@ st.markdown(original_title, unsafe_allow_html=True)
 
 with st.sidebar:
     st_lottie(lottie_coding, speed=0.2, height=150)
-    selected_vertical_menu = option_menu("Main Menu", ["Home", 'Settings', 'About'], icons=['house', 'gear'], menu_icon="cast",
-                           default_index=0)
+    selected_vertical_menu = option_menu("Main Menu", ["Home", 'Settings', 'About'], icons=['house', 'gear'],
+                                         menu_icon="cast",
+                                         default_index=0)
+    node_type = st.selectbox(
+        'Node Type Selection :',
+        ('NODE', 'GPIO', 'AnalogIn', 'AnalogOut', 'CLK', 'DATA', 'Internal'))
+    st.write('NODE Type selected:', node_type)
 
-selected_horizontal = option_menu(None, ["Home", "Load", 'Settings'],
-                                  icons=['house', 'bi-file-earmark-arrow-down-fill', 'gear'],
+selected_horizontal = option_menu(None, ["Home", "Load", 'Save', 'Settings'],
+                                  icons=['house', 'bi-file-earmark-arrow-down-fill', 'bi-file-earmark-arrow-up-fill',
+                                         'gear'],
                                   menu_icon="cast", default_index=0, orientation="horizontal",
                                   styles={
                                       "container": {"padding": "0!important", "background-color": "#fafafa"},
@@ -66,14 +72,4 @@ if selected_vertical_menu == 'Settings':
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
 
-
 uploaded_file = st.file_uploader("Choose a file")
-if uploaded_file is not None:
-
-    # To read file as string:
-    string_data = stringio.read()
-    st.write(string_data)
-
-    # Can be used wherever a "file-like" object is accepted:
-    dataframe = pd.read_csv(uploaded_file)
-    st.write(dataframe)
