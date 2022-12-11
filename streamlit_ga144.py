@@ -43,6 +43,19 @@ with st.sidebar:
         'Node Type Selection :',
         ('NODE', 'GPIO', 'AnalogIn', 'AnalogOut', 'CLK', 'DATA', 'Internal'))
     st.write('NODE Type selected:', node_type)
+    list_node=''
+    if node_type == 'GPIO':
+        list_node = '600', '500', '217', '317', '417', '517', '715'
+    if node_type == 'AnalogIn':
+        list_node = '117' ,'617', '717' , '713', '709'
+    if node_type == 'AnalogOut':
+        list_node = '117', '617', '717', '713', '709'
+    if node_type == 'CLK':
+        list_node = '300' ,'001' ,'701'
+    if node_type == 'DATA':
+        list_node = '300' , '001', '701'
+    node = st.selectbox('Node' , list_node)
+    st.write('NODE selected:', node)
 
 selected_horizontal = option_menu(None, ["Home", "Load", 'Save', 'Settings'],
                                   icons=['house', 'bi-file-earmark-arrow-down-fill', 'bi-file-earmark-arrow-up-fill',
