@@ -93,6 +93,7 @@ if selected_horizontal == 'Save':
 code_editeur = st_ace(value = string_data, language='forth', theme='cobalt', font_size=25)
 code_editeur
 
+
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
 
