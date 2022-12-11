@@ -67,9 +67,9 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
-selected_horizontal = option_menu(None, ["Home", "Load", 'Save', 'Settings'],
-                                  icons=['house', 'bi-file-earmark-arrow-down-fill', 'bi-file-earmark-arrow-up-fill',
-                                         'gear'],
+selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
+                                  icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill', 'bi-file-earmark-arrow-up-fill',
+                                         ],
                                   menu_icon="cast", default_index=0, orientation="horizontal",
                                   styles={
                                       "container": {"padding": "0!important", "background-color": "#fafafa"},
@@ -79,6 +79,10 @@ selected_horizontal = option_menu(None, ["Home", "Load", 'Save', 'Settings'],
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
+if selected_horizontal == 'Load':
+    loaded_file_ = st.file_uploader("Choose a file")
+if selected_horizontal == 'Save':
+    saved_file = st.file_uploader("Choose a file")
 
 code_editeur = st_ace(language='forth', theme='cobalt', font_size=25)
 code_editeur
@@ -94,5 +98,3 @@ if selected_vertical_menu == 'Settings':
         list_port.append(port)
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
-
-uploaded_file = st.file_uploader("Choose a file")
