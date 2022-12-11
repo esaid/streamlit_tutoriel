@@ -1,5 +1,6 @@
 import json
 import time
+from io import StringIO
 
 import requests
 import serial.tools.list_ports
@@ -79,12 +80,17 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
+string_data =''
 if selected_horizontal == 'Load':
-    loaded_file_ = st.file_uploader("Choose a file")
+    loaded_file = st.file_uploader("Choose a file")
+    if loaded_file is not None:
+        string_data = StringIO.read()
+        st.write(string_data)
+
 if selected_horizontal == 'Save':
     saved_file = st.file_uploader("Choose a file")
 
-code_editeur = st_ace(language='forth', theme='cobalt', font_size=25)
+code_editeur = st_ace(value = string_data, language='forth', theme='cobalt', font_size=25)
 code_editeur
 
 if selected_vertical_menu == 'About':
