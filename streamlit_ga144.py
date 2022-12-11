@@ -41,20 +41,30 @@ with st.sidebar:
                                          default_index=0)
     node_type = st.selectbox(
         'Node Type Selection :',
-        ('NODE', 'GPIO', 'AnalogIn', 'AnalogOut', 'CLK', 'DATA', 'Internal'))
-    st.write('NODE Type selected:', node_type)
-    list_node=''
+        ('NODE', 'GPIO', 'Analog-In', 'Analog-Out', 'CLK', 'DATA', 'Internal'))
+
+    list_node = ''
     if node_type == 'GPIO':
         list_node = '600', '500', '217', '317', '417', '517', '715'
-    if node_type == 'AnalogIn':
-        list_node = '117' ,'617', '717' , '713', '709'
-    if node_type == 'AnalogOut':
+    if node_type == 'Analog-In':
+        list_node = '117', '617', '717', '713', '709'
+    if node_type == 'Analog-Out':
         list_node = '117', '617', '717', '713', '709'
     if node_type == 'CLK':
-        list_node = '300' ,'001' ,'701'
+        list_node = '300', '001', '701'
     if node_type == 'DATA':
-        list_node = '300' , '001', '701'
-    node = st.selectbox('Node' , list_node)
+        list_node = '300', '001', '701'
+    if node_type == 'Internal':
+        list_node = '002', '003', '004', '005', '006', '010', '011', '012', '013', '014', '015', '016', '017', '101', '102', '103', '104', '105', '106', '107', \
+                    '108', '109', '110', '111', '112', '113', '114', '115', '116', '201', '202', '203', '204', '205', '206', '207', '208', '209', '210', '211', '212', \
+                    '213', '214', '215', '216', '300', '301', '302', '303', '304', '305', '306', '307', '308', '309', '310', '311', '312', '313', '314', '315', '316', \
+                    '400', '401', '402', '403', '404', '405', '406', '407', '408', '409', '410', '411', '412', '413', '414', '415', '416', \
+                    '501', '502', '503', '504', '505', '506', '507', '508', '509', '510', '511', '512', '513', '514', '515', '516', \
+                    '601', '602', '603', '604', '605', '606', '607', '608', '609', '610', '611', '612', '613', '614', '615', '616', \
+                    '700', '702', '703', '704', '706', '707', '710', '711', '712', '714', '716'
+
+    node = st.selectbox('Node', list_node)
+    st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
 selected_horizontal = option_menu(None, ["Home", "Load", 'Save', 'Settings'],
