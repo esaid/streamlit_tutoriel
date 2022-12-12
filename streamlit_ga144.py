@@ -99,12 +99,13 @@ if selected_horizontal == 'Save':
 
 if selected_horizontal == 'New':
     code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga")
-    if st.button:
+    if st.button:  # CTRL + ENTER
+        node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+        st.text(node_file)
+        # st.code(code_editeur , language='fortran')
+        with open(node_file, "w") as f:
+            f.write(code_editeur) # save code to '117.ga'
 
-        st.text(code_editeur.title().split())  # ['Node','117']
-        st.code(code_editeur)
-        with open(f"{code_editeur.title().split()[1]}.ga" ,"w") as f:
-            f.write( code_editeur)
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
