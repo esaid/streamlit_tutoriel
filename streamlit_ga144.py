@@ -8,7 +8,7 @@ import streamlit as st
 from streamlit_ace import st_ace
 from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
-import pandas as pd
+
 
 
 def load_lottieurl(url: str):
@@ -96,6 +96,12 @@ if selected_horizontal == 'Load':
 if selected_horizontal == 'Save':
     saved_file = st.file_uploader ( "Choose a file" )
     saved_file = data_code
+
+
+
+
+if selected_horizontal == 'New':
+    code_editeur = st_ace ( value= f"/ node {node}\n", language='forth', theme='cobalt', font_size=25 , key = f"{node}.ga")
 
 
 
