@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from io import StringIO
 
@@ -82,7 +83,7 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
-selected_node =[]
+selected_node = []
 data_code = ""
 if selected_horizontal == 'Load':
     loaded_file = st.file_uploader("Choose a file")
@@ -92,15 +93,18 @@ if selected_horizontal == 'Load':
 
         code_editeur = st_ace(value=data_code, language='forth', theme='cobalt', font_size=25, key=loaded_file.name)
 
-
-
 if selected_horizontal == 'Save':
     saved_file = st.file_uploader("Choose a file")
     saved_file = data_code
 
 if selected_horizontal == 'New':
-    code_editeur = st_ace(value=f"/ node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga")
+    code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga")
+    if st.button:
 
+        st.text(code_editeur.title().split())  # ['Node','117']
+        st.code(code_editeur)
+        with open(f"{code_editeur.title().split()[1]}.ga" ,"w") as f:
+            f.write( code_editeur)
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
@@ -113,8 +117,6 @@ if selected_vertical_menu == 'Settings':
         list_port.append(port)
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
-
-
 
 my_expander = st.expander(label='GA144 Nodes')
 with my_expander:
@@ -138,9 +140,6 @@ with my_expander:
         "016", "017"
     ]
 
-
     cols = cycle(st.columns(18))  # st.columns here since it is out of beta at the time I'm writing this
     for idx, button_node in enumerate(list_node_button):
         next(cols).button(label=str(button_node))
-
-
