@@ -31,11 +31,11 @@ lottie_coding = load_lottiefile(cpu_file)
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
 lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
 
-with st.spinner(text="GA144"):
-    st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
-
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
+
+with st.spinner(text="GA144"):
+    st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
 
 with st.sidebar:
     st_lottie(lottie_coding, speed=0.2, height=150)
@@ -64,11 +64,37 @@ with st.sidebar:
                     '400', '401', '402', '403', '404', '405', '406', '407', '408', '409', '410', '411', '412', '413', '414', '415', '416', \
                     '501', '502', '503', '504', '505', '506', '507', '508', '509', '510', '511', '512', '513', '514', '515', '516', \
                     '601', '602', '603', '604', '605', '606', '607', '608', '609', '610', '611', '612', '613', '614', '615', '616', \
-                    '700', '702', '703', '704', '706', '707', '710', '711', '712', '714', '716'
+                    '700', '701', '702', '703', '704', '706', '707', '708', '710', '711', '712', '714', '716'
 
     node = st.selectbox('Node', list_node)
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
+
+with st.empty().container():
+    cwd = os.getcwd()  # folder
+    projet = st.text_input('Project :  👇')
+    st.write(f"Current working directory: {cwd}")
+
+    if not projet:
+        st.warning('Please input a name directory project')
+        st.stop()
+
+    st.success('Thank you for inputting a name.')
+    path = os.path.join(cwd, projet)
+    try:
+        os.mkdir(path)
+    except OSError as errordirectory:
+        st.error(f'This is an error  {errordirectory}', icon="🚨")
+        st.stop()
+    # os.chdir(path)
+    st.info(f'Create init.ga file in {projet}', icon="ℹ️")
+    init_text = '( init file )\n'
+    with open('init.ga', "w") as f:
+        f.write(init_text)  # save code init file
+    time.sleep(3)
+st.empty().empty() # clear
+
+
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
@@ -104,8 +130,7 @@ if selected_horizontal == 'New':
         st.text(node_file)
         # st.code(code_editeur , language='fortran')
         with open(node_file, "w") as f:
-            f.write(code_editeur) # save code to '117.ga'
-
+            f.write(code_editeur)  # save code to '117.ga'
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
