@@ -69,6 +69,7 @@ with st.sidebar:
     node = st.selectbox('Node', list_node)
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
+
 placeholder = st.empty()
 with placeholder.container():
     cwd = os.getcwd()  # folder
@@ -92,10 +93,8 @@ with placeholder.container():
     with open('init.ga', "w") as f:
         f.write(init_text)  # save code init file
     time.sleep(3)
-    os.chdir(cwd) # path_initial
-    placeholder.empty().empty() # clear ?
-
-
+    os.chdir(cwd)  # path_initial
+    placeholder.empty().empty()  # clear ?
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
