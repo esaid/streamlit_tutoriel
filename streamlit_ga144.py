@@ -118,11 +118,11 @@ with col2:
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
             path = os.path.join(cwd, projet)
             try:
-                os.mkdir(path)
+                os.mkdir(path) # creation repertoire
             except OSError as errordirectory:
                 st.error(f'This is an error  {errordirectory}', icon="🚨")
                 st.stop()
-            os.chdir(path)  # path_initial /projet
+            os.chdir(path)  # path projet
             st.info(f'Create init.ga file in {projet}', icon="ℹ️")
             init_text = f"/ {path}\n"
             with open('init.ga', "w") as f:
