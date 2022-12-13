@@ -70,7 +70,7 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
-with st.empty().container():
+with st.container():
     cwd = os.getcwd()  # folder
     projet = st.text_input('Project :  👇')
     st.write(f"Current working directory: {cwd}")
@@ -86,13 +86,16 @@ with st.empty().container():
     except OSError as errordirectory:
         st.error(f'This is an error  {errordirectory}', icon="🚨")
         st.stop()
-    # os.chdir(path)
+    os.chdir(path)  # path_initial /projet
     st.info(f'Create init.ga file in {projet}', icon="ℹ️")
     init_text = '( init file )\n'
     with open('init.ga', "w") as f:
         f.write(init_text)  # save code init file
     time.sleep(3)
-st.empty().empty() # clear
+    os.chdir(cwd) # path_initial
+    st.container().empty()
+
+# clear ?
 
 
 
