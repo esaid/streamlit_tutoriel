@@ -85,13 +85,10 @@ with col1:
         if select_projet is not None:
             path_in = select_projet.name
             placeholder_col1.empty().empty()
-
-
         else:
             path_in = None
         time.sleep(5)
         st.write(path_in)
-
 
 with col2:
     placeholder_col2 = st.empty()
@@ -122,7 +119,6 @@ with col2:
             time.sleep(5)
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
-
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
