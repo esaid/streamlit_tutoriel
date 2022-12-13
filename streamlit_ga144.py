@@ -75,26 +75,34 @@ with st.sidebar:
 if 'projet' not in st.session_state:
     st.session_state['projet'] = False
 
+if 'list_files_project'not in st.session_state:
+    st.session_state['list_files_project'] = []
+
 col1, col2 = st.columns([1, 1])
 
 with col1:
     placeholder_col1 = st.empty()
     with placeholder_col1.container():
-        st.title('Load Project :     select ini.ga ')
-        select_projet = st.file_uploader("Choose a file ini.ga in project folder ", type=['ga'])
-        if select_projet is not None:
-            path_in = select_projet.name
-            placeholder_col1.empty().empty()
-        else:
-            path_in = None
-        time.sleep(5)
-        st.write(path_in)
+        if st.session_state['projet'] is False:
+            st.title('Load Project :')
+            select_projet = st.file_uploader("Choose a file ini.ga in project folder ", type=['ga'])
+            if select_projet:
+                st.session_state['projet'] = True
+                data = select_projet.getvalue().decode('utf-8')
+                st.write(data[2:])
+                st.session_state['list_files_project'] += 'ini.ga'
+                #st.write(st.session_state['list_files_project'])
+                time.sleep(4)
+                placeholder_col1.empty().empty()
+
+
 
 with col2:
     placeholder_col2 = st.empty()
     with placeholder_col2.container():
-        st.title('Create Project :')
+
         if st.session_state['projet'] is False:
+            st.title('Create Project :')
             cwd = os.getcwd()  # folder
             projet = st.text_input('Project :  👇')
             st.write(f"Current working directory: {cwd}")
@@ -116,9 +124,10 @@ with col2:
                 f.write(init_text)  # save code init file
 
             os.chdir(cwd)  # path_initial
+            st.write(os.getcwd())
             time.sleep(5)
             placeholder_col2.empty().empty()  # clear
-            placeholder_col1.empty().empty()
+
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
