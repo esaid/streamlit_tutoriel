@@ -12,6 +12,7 @@ from streamlit_option_menu import option_menu
 from itertools import cycle
 
 
+# lottie url file
 def load_lottieurl(url: str):
     r = requests.get(url)
     if r.status_code != 200:
@@ -32,29 +33,34 @@ if 'projet' not in st.session_state:
 if 'list_files_project' not in st.session_state:
     st.session_state['list_files_project'] = ''
 
+# elargir la page
 st.set_page_config(layout="wide")
+# charger animation cpu
 cpu_file = "cpu.json"
-lottie_coding = load_lottiefile(cpu_file)
-
+lottie_cpu = load_lottiefile(cpu_file)
+# charger animation ecriture code informatique
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
 lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
 
+# titre avec style css html
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
+# affichage repertoire fichiers du projet si exisant
 if st.session_state['projet'] is True:
     st.write("Projet :: \n")
-    #l = str(st.session_state['list_files_project']).split("\n")
+    # l = str(st.session_state['list_files_project']).split("\n")
     for l in str(st.session_state['list_files_project']).split("\n"):
         st.write(f"\n ---->  {l}")
-
+# afficher  animation cpu
 with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
-
+# afficher animation cpu et menu vertical
 with st.sidebar:
-    st_lottie(lottie_coding, speed=0.2, height=150)
+    st_lottie(lottie_cpu, speed=0.2, height=150)
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Settings', 'About'], icons=['house', 'gear'],
                                          menu_icon="cast",
                                          default_index=0)
+    # selection node par type et numero node
     node_type = st.selectbox(
         'Node Type Selection :',
         ('NODE', 'GPIO', 'Analog-In', 'Analog-Out', 'CLK', 'DATA', 'Internal'))
@@ -83,13 +89,13 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
-#  gestion projet
-# creation ou ouvrir le fichier ini.ga ( pour connaitre le repertoire )
+# col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
 col1, col2 = st.columns([1, 1])
-
+# charger  projet
 with col1:
-    placeholder_col1 = st.empty()
+    placeholder_col1 = st.empty()  # permet de faire disparaitre les elements
     with placeholder_col1.container():
+        # si pas de projet , on sélectionne le repertoire et fichier ini.ga
         if st.session_state['projet'] is False:
             st.title('Load Project :')
             select_projet = st.file_uploader("Choose a file ini.ga in project folder ", type=['ga'])
@@ -100,31 +106,32 @@ with col1:
                 st.session_state['list_files_project'] += 'ini.ga'  # fichier ini.ga
                 st.write(st.session_state['list_files_project'])
                 time.sleep(4)
-                placeholder_col1.empty().empty()
-
+                placeholder_col1.empty().empty()  # on fait disparaitre les elements
+# creer projet
 with col2:
-    placeholder_col2 = st.empty()
+    placeholder_col2 = st.empty()  # permet de faire disparaitre les elements
     with placeholder_col2.container():
-
+        # si pas de projet  , creation du projet
         if st.session_state['projet'] is False:
             st.title('Create Project :')
-            cwd = os.getcwd()  # folder
-            projet = st.text_input('Project :  👇')
+            cwd = os.getcwd()  # folder courant
+            projet = st.text_input('Project :  👇')  # nom du projet
             st.write(f"Current working directory: {cwd}")
-            if not projet:
+            if not projet:  # gere si on a bien rentrer un nom de projet
                 st.warning('Please input a name directory project')
                 st.stop()
             st.session_state['projet'] = True
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
-            path = os.path.join(cwd, projet)
+            path = os.path.join(cwd, projet)  # chemin repertoire du projet
             try:
-                os.mkdir(path) # creation repertoire
+                os.mkdir(path)  # creation repertoire , avec nom de projet
             except OSError as errordirectory:
                 st.error(f'This is an error  {errordirectory}', icon="🚨")
                 st.stop()
             os.chdir(path)  # path projet
             st.info(f'Create init.ga file in {projet}', icon="ℹ️")
-            init_text = f"/ {path}\n"
+            init_text = f"/ {path}\n"  #
+            # creation du fichier ini.ga
             with open('init.ga', "w") as f:
                 f.write(init_text)  # save code init file
 
@@ -135,7 +142,7 @@ with col2:
             time.sleep(5)
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
-
+# menu horizontal
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
                                          'bi-file-earmark-arrow-up-fill',
@@ -151,12 +158,13 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   )
 selected_node = []
 data_code = ""
+# charger fichier *.ga
 if selected_horizontal == 'Load':
-    loaded_file = st.file_uploader("Choose a file")
+    loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
-        bytes_data = loaded_file.getvalue()
+        # bytes_data = loaded_file.getvalue()
         data_code = loaded_file.getvalue().decode('utf-8')
-
+        # affiche le code dans editeur ace
         code_editeur = st_ace(value=data_code, language='forth', theme='cobalt', font_size=25, key=loaded_file.name)
 
 if selected_horizontal == 'Save':
