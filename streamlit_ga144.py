@@ -70,20 +70,20 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
-if 'key' not in st.session_state:
-    st.session_state.key = 'init'
+if 'projet' not in st.session_state:
+    st.session_state['projet'] = False
 placeholder = st.empty()
 with placeholder.container():
-    if st.session_state.key == "init":
+    if st.session_state['projet'] is False:
         cwd = os.getcwd()  # folder
-        projet = st.text_input('Project :  👇' , key='projet')
+        projet = st.text_input('Project :  👇')
         st.write(f"Current working directory: {cwd}")
-        st.session_state.key == "projet"
+
         if not projet:
             st.warning('Please input a name directory project')
             st.stop()
-
-        st.success('Thank you for inputting a name.')
+        st.session_state['projet'] = True
+        st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
         path = os.path.join(cwd, projet)
         try:
             os.mkdir(path)
