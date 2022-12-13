@@ -24,6 +24,14 @@ def load_lottiefile(filepath: str):
         return json.load(f)
 
 
+# gestion projet
+if 'projet' not in st.session_state:
+    st.session_state['projet'] = False
+
+# gestion repertoire et fichiers dans projet
+if 'list_files_project' not in st.session_state:
+    st.session_state['list_files_project'] = ''
+
 st.set_page_config(layout="wide")
 cpu_file = "cpu.json"
 lottie_coding = load_lottiefile(cpu_file)
@@ -33,6 +41,11 @@ lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
 
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
+if st.session_state['projet'] is True:
+    st.write("Projet :: \n")
+    #l = str(st.session_state['list_files_project']).split("\n")
+    for l in str(st.session_state['list_files_project']).split("\n"):
+        st.write(f"\n ---->  {l}")
 
 with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
@@ -72,12 +85,6 @@ with st.sidebar:
 
 #  gestion projet
 # creation ou ouvrir le fichier ini.ga ( pour connaitre le repertoire )
-if 'projet' not in st.session_state:
-    st.session_state['projet'] = False
-
-if 'list_files_project'not in st.session_state:
-    st.session_state['list_files_project'] = []
-
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -88,14 +95,12 @@ with col1:
             select_projet = st.file_uploader("Choose a file ini.ga in project folder ", type=['ga'])
             if select_projet:
                 st.session_state['projet'] = True
-                data = select_projet.getvalue().decode('utf-8')
-                st.write(data[2:])
-                st.session_state['list_files_project'] += 'ini.ga'
-                #st.write(st.session_state['list_files_project'])
+                directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
+                st.session_state['list_files_project'] += directory_project
+                st.session_state['list_files_project'] += 'ini.ga'  # fichier ini.ga
+                st.write(st.session_state['list_files_project'])
                 time.sleep(4)
                 placeholder_col1.empty().empty()
-
-
 
 with col2:
     placeholder_col2 = st.empty()
@@ -124,10 +129,12 @@ with col2:
                 f.write(init_text)  # save code init file
 
             os.chdir(cwd)  # path_initial
+            st.session_state['list_files_project'] += f"{path}\n"
+            st.session_state['list_files_project'] += 'ini.ga'
             st.write(os.getcwd())
             time.sleep(5)
             placeholder_col2.empty().empty()  # clear
-
+            placeholder_col1.empty().empty()
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
@@ -168,6 +175,7 @@ if selected_horizontal == 'New':
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
 
+# gestion port serie
 if selected_vertical_menu == 'Settings':
     message = ''
     ports = serial.tools.list_ports.comports()
@@ -177,6 +185,7 @@ if selected_vertical_menu == 'Settings':
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
 
+# gestion GA144 nodes
 my_expander = st.expander(label='GA144 Nodes')
 with my_expander:
     list_node_button = [
