@@ -70,31 +70,34 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
+if 'projet' not in st.session_state:
+    st.session_state.projet = 'init'
 placeholder = st.empty()
 with placeholder.container():
-    cwd = os.getcwd()  # folder
-    projet = st.text_input('Project :  👇')
-    st.write(f"Current working directory: {cwd}")
+    if st.session_state.projet == "init":
+        cwd = os.getcwd()  # folder
+        projet = st.text_input('Project :  👇', key="projet")
+        st.write(f"Current working directory: {cwd}")
+        st.session_state.projet
+        if not projet:
+            st.warning('Please input a name directory project')
+            st.stop()
 
-    if not projet:
-        st.warning('Please input a name directory project')
-        st.stop()
-
-    st.success('Thank you for inputting a name.')
-    path = os.path.join(cwd, projet)
-    try:
-        os.mkdir(path)
-    except OSError as errordirectory:
-        st.error(f'This is an error  {errordirectory}', icon="🚨")
-        st.stop()
-    os.chdir(path)  # path_initial /projet
-    st.info(f'Create init.ga file in {projet}', icon="ℹ️")
-    init_text = '( init file )\n'
-    with open('init.ga', "w") as f:
-        f.write(init_text)  # save code init file
-    time.sleep(3)
-    os.chdir(cwd)  # path_initial
-    placeholder.empty().empty()  # clear ?
+        st.success('Thank you for inputting a name.')
+        path = os.path.join(cwd, projet)
+        try:
+            os.mkdir(path)
+        except OSError as errordirectory:
+            st.error(f'This is an error  {errordirectory}', icon="🚨")
+            st.stop()
+        os.chdir(path)  # path_initial /projet
+        st.info(f'Create init.ga file in {projet}', icon="ℹ️")
+        init_text = '( init file )\n'
+        with open('init.ga', "w") as f:
+            f.write(init_text)  # save code init file
+        time.sleep(3)
+        os.chdir(cwd)  # path_initial
+        placeholder.empty().empty()  # clear ?
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
