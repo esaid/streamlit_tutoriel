@@ -70,34 +70,59 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
+#  gestion projet
+# creation ou ouvrir le fichier ini.ga ( pour connaitre le repertoire )
 if 'projet' not in st.session_state:
     st.session_state['projet'] = False
-placeholder = st.empty()
-with placeholder.container():
-    if st.session_state['projet'] is False:
-        cwd = os.getcwd()  # folder
-        projet = st.text_input('Project :  👇')
-        st.write(f"Current working directory: {cwd}")
 
-        if not projet:
-            st.warning('Please input a name directory project')
-            st.stop()
-        st.session_state['projet'] = True
-        st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
-        path = os.path.join(cwd, projet)
-        try:
-            os.mkdir(path)
-        except OSError as errordirectory:
-            st.error(f'This is an error  {errordirectory}', icon="🚨")
-            st.stop()
-        os.chdir(path)  # path_initial /projet
-        st.info(f'Create init.ga file in {projet}', icon="ℹ️")
-        init_text = '( init file )\n'
-        with open('init.ga', "w") as f:
-            f.write(init_text)  # save code init file
-        time.sleep(3)
-        os.chdir(cwd)  # path_initial
-        placeholder.empty().empty()  # clear ?
+col1, col2 = st.columns([1, 1])
+
+with col1:
+    placeholder_col1 = st.empty()
+    with placeholder_col1.container():
+        st.title('Load Project :     select ini.ga ')
+        select_projet = st.file_uploader("Choose a file ini.ga in project folder ", type=['ga'])
+        if select_projet is not None:
+            path_in = select_projet.name
+            placeholder_col1.empty().empty()
+
+
+        else:
+            path_in = None
+        time.sleep(5)
+        st.write(path_in)
+
+
+with col2:
+    placeholder_col2 = st.empty()
+    with placeholder_col2.container():
+        st.title('Create Project :')
+        if st.session_state['projet'] is False:
+            cwd = os.getcwd()  # folder
+            projet = st.text_input('Project :  👇')
+            st.write(f"Current working directory: {cwd}")
+            if not projet:
+                st.warning('Please input a name directory project')
+                st.stop()
+            st.session_state['projet'] = True
+            st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
+            path = os.path.join(cwd, projet)
+            try:
+                os.mkdir(path)
+            except OSError as errordirectory:
+                st.error(f'This is an error  {errordirectory}', icon="🚨")
+                st.stop()
+            os.chdir(path)  # path_initial /projet
+            st.info(f'Create init.ga file in {projet}', icon="ℹ️")
+            init_text = f"/ {path}\n"
+            with open('init.ga', "w") as f:
+                f.write(init_text)  # save code init file
+
+            os.chdir(cwd)  # path_initial
+            time.sleep(5)
+            placeholder_col2.empty().empty()  # clear
+            placeholder_col1.empty().empty()
+
 
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
