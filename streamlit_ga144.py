@@ -69,8 +69,8 @@ with st.sidebar:
     node = st.selectbox('Node', list_node)
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
-
-with st.container():
+placeholder = st.empty()
+with placeholder.container():
     cwd = os.getcwd()  # folder
     projet = st.text_input('Project :  👇')
     st.write(f"Current working directory: {cwd}")
@@ -93,9 +93,7 @@ with st.container():
         f.write(init_text)  # save code init file
     time.sleep(3)
     os.chdir(cwd) # path_initial
-    st.container().empty()
-
-# clear ?
+    placeholder.empty().empty() # clear ?
 
 
 
