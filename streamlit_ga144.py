@@ -132,8 +132,8 @@ with col2:
         if st.session_state['projet'] is False:
             st.title('Create Project :')
 
-            name_projet = st.text_input('Project :  👇')  # nom du projet
-            st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
+            name_projet = st.text_input('Name Project :  👇')  # nom du projet
+            # st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
             if not name_projet:  # gere si on a bien rentrer un nom de projet
                 st.warning('Please input a name directory project')
                 st.stop()
