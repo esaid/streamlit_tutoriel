@@ -2,7 +2,6 @@ import json
 import os
 import time
 import glob
-from io import StringIO
 
 import requests
 import serial.tools.list_ports
@@ -25,11 +24,11 @@ def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
         return json.load(f)
 
+
 def file_in_folder():
     dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
     os.chdir(dir)  # path projet
     return sorted(glob.glob("*.ga"))
-
 
 
 # gestion projet
@@ -119,7 +118,7 @@ with col1:
                 st.session_state['projet'] = True
                 directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
                 st.session_state['folder_project'] = directory_project
-                name_projet = directory_project[directory_project.rindex('/')+1:]
+                name_projet = directory_project[directory_project.rindex('/') + 1:]
                 st.session_state['name_projet'] = name_projet
                 # st.write(name_projet)
                 # st.write(file_in_folder())
@@ -141,7 +140,8 @@ with col2:
             st.session_state['projet'] = True
             st.session_state['name_projet'] = name_projet
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
-            st.session_state['folder_project'] = os.path.join(st.session_state['folder_streamlit'], name_projet)  # chemin repertoire du projet
+            st.session_state['folder_project'] = os.path.join(st.session_state['folder_streamlit'],
+                                                              name_projet)  # chemin repertoire du projet
             try:
                 os.mkdir(st.session_state['folder_project'])  # creation repertoire , avec nom de projet
             except OSError as errordirectory:
@@ -203,7 +203,6 @@ if selected_horizontal == 'New':
         with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
             f.write(code_editeur)  # save code to '117.ga'
         time.sleep(5)
-
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
