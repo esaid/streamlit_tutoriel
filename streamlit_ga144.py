@@ -11,7 +11,6 @@ from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
 
-
 # lottie url file
 def load_lottieurl(url: str):
     r = requests.get ( url )
