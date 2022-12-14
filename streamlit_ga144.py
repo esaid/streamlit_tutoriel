@@ -28,7 +28,7 @@ def load_lottiefile(filepath: str):
 def file_in_folder():
     dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
     os.chdir(dir)  # path projet
-    return glob.glob("*.ga")
+    return sorted(glob.glob("*.ga"))
 
 
 
