@@ -25,6 +25,7 @@ def load_lottiefile(filepath: str):
         return json.load(f)
 
 
+
 def file_in_folder():
     dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
     os.chdir(dir)  # path projet
@@ -54,6 +55,14 @@ if 'code' not in st.session_state:
 
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
+
+
+
+def select_folder_project():
+    directory = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    st.write(directory)
+    os.chdir(directory)  # path projet
+
 
 # elargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
@@ -196,9 +205,8 @@ selected_node = []
 data_code = ""
 
 if selected_horizontal == 'Home':
-    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-    st.write(dir)
-    os.chdir(dir)  # path projet
+    select_folder_project()
+
 
 
 def view_code_node():
@@ -224,6 +232,7 @@ if selected_horizontal == 'Load':
 
 
 if selected_horizontal == 'Save':
+    select_folder_project()
     file_save = st.session_state['file_code']
     file_code = st.session_state['code']
     with open(file_save, "w") as f:
@@ -242,9 +251,7 @@ if selected_horizontal == 'New':
         folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
         st.text(f"Node : {folder_file}")
         time.sleep(5)
-        dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-        st.write(dir)
-        os.chdir(dir)  # path projet
+        select_folder_project()
         with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
             f.write(code_editeur)  # save code to '117.ga'
         time.sleep(5)
