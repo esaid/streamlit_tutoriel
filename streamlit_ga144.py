@@ -52,7 +52,7 @@ cpu_file = "cpu.json"
 dir_cpu_file = f"{st.session_state['folder_streamlit']}\{cpu_file}"
 os.chdir(st.session_state['folder_streamlit'])  # path streamlit
 st.write(os.getcwd())
-lottie_cpu = load_lottiefile(cpu_file)
+# lottie_cpu = load_lottiefile(cpu_file)
 
 # charger animation ecriture code informatique
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
