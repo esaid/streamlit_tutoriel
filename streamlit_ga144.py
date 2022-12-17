@@ -82,9 +82,10 @@ original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">
 st.markdown(original_title, unsafe_allow_html=True)
 # affichage repertoire fichiers du projet si exisant
 if st.session_state['projet'] is True:
+    file_project_font = '<p style="font-family:Courier; color:Green; font-size: 40px;">f"\n ---->  {files}"</p>'
     st.write(f"Projet ::  {st.session_state['name_projet']}\n")
     for files in file_in_folder():
-        st.write(f"\n ---->  {files}")
+        st.markdown(file_project_font, unsafe_allow_html=True )
 # afficher  animation cpu
 with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
@@ -214,7 +215,7 @@ def view_code_node():
     # affiche le code dans editeur ace
     code_editeur = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True)
     node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
-    st.session_state['file_code'] = node_file
+    st.session_state['file_node'] = node_file
     st.session_state['code'] = code_editeur
 
 
@@ -236,7 +237,8 @@ if selected_horizontal == 'Save':
     file_code = st.session_state['code']
     with open(file_save, "w") as f:
         f.write(file_code)  # save code init file
-        st.write('save')
+        st.info(f'save {file_save}')
+        time.sleep(3)
     view_code_node()
 
 if selected_horizontal == 'New':
