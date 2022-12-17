@@ -113,17 +113,25 @@ with col1:
         # si pas de projet , on sélectionne le repertoire et fichier ini.ga
         if st.session_state['projet'] is False:
             st.title('Load Project :')
-            select_projet = st.file_uploader("Choose a file ini.ga in project folder ", type=['ga'])
+            select_projet = st.file_uploader("Choose a file init.ga in project folder ", type=['ga'])
+
+            st.warning('Please select a file ini.ga')
+
             if select_projet:
-                st.session_state['projet'] = True
-                directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
-                st.session_state['folder_project'] = directory_project
-                name_projet = directory_project[directory_project.rindex('/') + 1:]
-                st.session_state['name_projet'] = name_projet
-                # st.write(name_projet)
-                # st.write(file_in_folder())
-                time.sleep(4)
-                placeholder_col1.empty().empty()  # on fait disparaitre les elements
+                if select_projet.name == 'init.ga':
+
+                    st.session_state['projet'] = True
+                    directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
+                    st.session_state['folder_project'] = directory_project
+                    name_projet = directory_project[directory_project.rindex('/') + 1:]
+                    st.session_state['name_projet'] = name_projet
+                    # st.write(name_projet)
+                    # st.write(file_in_folder())
+                    time.sleep(4)
+                    placeholder_col1.empty().empty()  # on fait disparaitre les elements
+
+
+
 # creer projet
 with col2:
     placeholder_col2 = st.empty()  # permet de faire disparaitre les elements
@@ -177,8 +185,17 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   )
 selected_node = []
 data_code = ""
+
+if selected_horizontal == 'Home':
+    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    st.write(dir)
+    os.chdir(dir)  # path projet
+
 # charger fichier *.ga
 if selected_horizontal == 'Load':
+    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    st.write(dir)
+    os.chdir(dir)  # path projet
     loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
         # bytes_data = loaded_file.getvalue()
@@ -186,9 +203,9 @@ if selected_horizontal == 'Load':
         # affiche le code dans editeur ace
         code_editeur = st_ace(value=data_code, language='forth', theme='cobalt', font_size=25, key=loaded_file.name)
 
-if selected_horizontal == 'Save':
-    saved_file = st.file_uploader("Choose a file")
-    saved_file = data_code
+        if selected_horizontal == 'Save':
+            with open(loaded_file.getvalue(), "w") as f:
+                f.write(code_editeur)  # save code init file
 
 if selected_horizontal == 'New':
     code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga")
