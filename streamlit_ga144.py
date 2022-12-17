@@ -71,7 +71,7 @@ with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
 # afficher animation cpu et menu vertical
 with st.sidebar:
-    st_lottie(lottie_cpu, speed=1, height=150)
+    # st_lottie(lottie_cpu, speed=1, height=150)
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Settings', 'About'], icons=['house', 'gear'],
                                          menu_icon="cast",
                                          default_index=0)
