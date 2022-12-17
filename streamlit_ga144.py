@@ -115,10 +115,11 @@ with col1:
             st.title('Load Project :')
             select_projet = st.file_uploader("Choose a file init.ga in project folder ", type=['ga'])
 
-            st.warning('Please select a file ini.ga')
+            st.warning('Please select a file init.ga')
 
             if select_projet:
                 if select_projet.name == 'init.ga':
+                    st.info("file init.ga' selected")
 
                     st.session_state['projet'] = True
                     directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
@@ -209,17 +210,22 @@ if selected_horizontal == 'Load':
 
 if selected_horizontal == 'New':
     code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga")
-    if st.button:  # CTRL + ENTER
-        node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
-        folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
-        st.text(f"Node : {folder_file}")
-        time.sleep(5)
-        dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-        st.write(dir)
-        os.chdir(dir)  # path projet
-        with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
-            f.write(code_editeur)  # save code to '117.ga'
-        time.sleep(5)
+
+    node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+    folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
+    st.text(f"Node : {folder_file}")
+    time.sleep(5)
+    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    st.write(dir)
+    os.chdir(dir)  # path projet
+    with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
+        f.write(code_editeur)  # save code to '117.ga'
+    time.sleep(5)
+    if selected_horizontal == 'Save':
+        with open(node_file.getvalue(), "w") as f:
+            f.write(code_editeur)  # save code init file
+            st.write('save')
+            time.sleep(5)
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
