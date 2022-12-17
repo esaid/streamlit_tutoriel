@@ -49,6 +49,7 @@ if 'folder_project' not in st.session_state:
     st.session_state['folder_project'] = ''
 # gestion repertoire streamlit
 if 'folder_streamlit' not in st.session_state:
+    # initialisation par defaut
     st.session_state['folder_streamlit'] = "\n\r".join(os.getcwd().splitlines())  # sauvegarde repertoire streamlit
 
 if 'code' not in st.session_state:
@@ -73,9 +74,19 @@ def select_folder_streamlit():
     os.chdir(streamlit_folder)  # path projet
 
 
+def select_Folder_principal():
+
+    if os.path.exists(master_folder):
+        st.session_state['folder_streamlit'] = master_folder
+        st.success("Folder validated ")
+        time.sleep(4)
+    else:
+        st.warning('error Folder not found...')
+        st.stop()
+
+
 # elargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
-
 
 select_folder_streamlit()
 # charger animation cpu
@@ -107,7 +118,8 @@ with st.spinner(text="GA144"):
 # afficher animation cpu et menu vertical
 with st.sidebar:
     # st_lottie(lottie_cpu, speed=1, height=150)
-    selected_vertical_menu = option_menu("Main Menu", ["Home", 'Settings', 'About'], icons=['house', 'gear'],
+    selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-Folder', 'Setting-communication', 'About'],
+                                         icons=['house', 'gear', 'gear'],
                                          menu_icon="cast",
                                          default_index=0)
     # selection node par type et numero node
@@ -170,13 +182,21 @@ with col2:
     with placeholder_col2.container():
         # si pas de projet  , creation du projet
         if st.session_state['projet'] is False:
+
             st.title('Create Project :')
+
             name_projet = st.text_input('Name Project :  👇')  # nom du projet
 
-            if not name_projet:  # gere si on a bien rentrer un nom de projet
-                st.warning('Please input a name directory project')
+            if not name_projet:  # gere si on a bien rentre un nom de projet
+                st.warning('Please input a name  project')
                 st.stop()
-            select_folder_streamlit()
+            master_folder = st.text_input('Input Master Folder for projects :')
+            if not master_folder:
+                st.warning('Please input a Folder')
+                st.stop()
+            select_Folder_principal()
+
+
             st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
 
             st.session_state['projet'] = True
@@ -214,7 +234,6 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   )
 
 if selected_horizontal == 'Home':
-
     select_folder_project()
 
 
@@ -269,7 +288,7 @@ if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
 
 # gestion port serie
-if selected_vertical_menu == 'Settings':
+if selected_vertical_menu == 'Setting-communication':
     message = ''
     ports = serial.tools.list_ports.comports()
     list_port = []
@@ -278,6 +297,10 @@ if selected_vertical_menu == 'Settings':
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
     st.session_state['serial_port'] = option_port_serial
+
+# gestion Folder principal
+if selected_vertical_menu == 'Setting-Folder':
+    select_Folder_principal()
 
 # gestion GA144 nodes
 my_expander = st.expander(label='GA144 Nodes')
