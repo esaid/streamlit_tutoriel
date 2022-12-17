@@ -56,6 +56,9 @@ if 'code' not in st.session_state:
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
 
+if 'serial_port' not in st.session_state:
+    st.session_state['serial_port'] = ''
+
 
 def select_folder_project():
     directory = "\n\r".join(str(st.session_state['folder_project']).splitlines())
@@ -261,6 +264,8 @@ if selected_vertical_menu == 'Settings':
         list_port.append(port)
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
+    st.session_state['serial_port'] =  option_port_serial
+
 
 # gestion GA144 nodes
 my_expander = st.expander(label='GA144 Nodes')
