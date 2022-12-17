@@ -65,6 +65,13 @@ def select_folder_project():
     os.chdir(directory)  # path projet
 
 
+def select_folder_streamlit():
+    directory = "\n\r".join(str(st.session_state['folder_streamlit']).splitlines())
+    os.chdir(directory)  # path projet
+
+
+select_folder_streamlit()
+
 # elargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 # charger animation cpu
@@ -161,10 +168,13 @@ with col2:
         if st.session_state['projet'] is False:
             st.title('Create Project :')
             name_projet = st.text_input('Name Project :  👇')  # nom du projet
-            # st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
+
             if not name_projet:  # gere si on a bien rentrer un nom de projet
                 st.warning('Please input a name directory project')
                 st.stop()
+            select_folder_streamlit()
+            st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
+            st.write(os.getcwd())
             st.session_state['projet'] = True
             st.session_state['name_projet'] = name_projet
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
@@ -198,7 +208,6 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
-
 
 if selected_horizontal == 'Home':
     select_folder_project()
@@ -234,7 +243,6 @@ if selected_horizontal == 'Save':
     else:
         st.warning('no file selected')
 
-
 if selected_horizontal == 'New':
     if is_file_exist(node):
         st.warning(" node exist , please select Load node")
@@ -264,8 +272,7 @@ if selected_vertical_menu == 'Settings':
         list_port.append(port)
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
-    st.session_state['serial_port'] =  option_port_serial
-
+    st.session_state['serial_port'] = option_port_serial
 
 # gestion GA144 nodes
 my_expander = st.expander(label='GA144 Nodes')
