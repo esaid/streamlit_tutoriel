@@ -25,15 +25,16 @@ def load_lottiefile(filepath: str):
         return json.load(f)
 
 
-
 def file_in_folder():
     dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
     os.chdir(dir)  # path projet
     return sorted(glob.glob("*.ga"))
 
+
 def is_file_exist(file_):
     folder = file_in_folder()
-    return file_+'.ga' in folder
+    return file_ + '.ga' in folder
+
 
 # gestion projet
 if 'projet' not in st.session_state:
@@ -52,15 +53,12 @@ if 'folder_streamlit' not in st.session_state:
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
 
-
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
 
 
-
 def select_folder_project():
     directory = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-    st.write(directory)
     os.chdir(directory)  # path projet
 
 
@@ -76,18 +74,19 @@ st.write(os.getcwd())
 # charger animation ecriture code informatique
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
 lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
+col1, col2, col3 = st.columns([1, 1, 1])
 
 # titre avec style css html
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
-# affichage repertoire fichiers du projet si exisant
-if st.session_state['projet'] is True:
-    project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">Project :: {st.session_state['name_projet']}</p>"""
-    st.markdown(project_font , unsafe_allow_html=True)
-    for file in file_in_folder():
+with col3:
+    # affichage repertoire fichiers du projet si exisant
+    if st.session_state['projet'] is True:
+        project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">Project :: {st.session_state['name_projet']}</p>"""
+        st.markdown(project_font, unsafe_allow_html=True)
+        file_project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">{', '.join(file_in_folder())}</p>"""
+        st.markdown(file_project_font, unsafe_allow_html=True)
 
-        file_project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">{file}</p>"""
-        st.markdown(file_project_font, unsafe_allow_html=True )
 # afficher  animation cpu
 with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
@@ -136,9 +135,7 @@ with col1:
         if st.session_state['projet'] is False:
             st.title('Load Project :')
             select_projet = st.file_uploader("Choose a file init.ga in project folder ", type=['ga'])
-
             st.warning('Please select a file init.ga')
-
             if select_projet:
                 if select_projet.name == 'init.ga':
                     st.info("file init.ga' selected")
@@ -160,7 +157,6 @@ with col2:
         # si pas de projet  , creation du projet
         if st.session_state['projet'] is False:
             st.title('Create Project :')
-
             name_projet = st.text_input('Name Project :  👇')  # nom du projet
             # st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
             if not name_projet:  # gere si on a bien rentrer un nom de projet
@@ -182,9 +178,6 @@ with col2:
             # creation du fichier ini.ga
             with open('init.ga', "w") as f:
                 f.write(init_text)  # save code init file
-
-            # os.chdir ( st.session_state['folder_streamlit'] )  # path_initial
-
             st.write(os.getcwd())
             st.write(file_in_folder())
             time.sleep(5)
@@ -204,12 +197,10 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
-selected_node = []
-data_code = ""
+
 
 if selected_horizontal == 'Home':
     select_folder_project()
-
 
 
 def view_code_node():
@@ -221,30 +212,29 @@ def view_code_node():
     st.session_state['code'] = code_editeur
 
 
-
 # charger fichier *.ga
 if selected_horizontal == 'Load':
     select_folder_project()
-
     loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
         st.session_state['code'] = loaded_file.getvalue().decode('utf-8')
         st.write(st.session_state['code'])
         view_code_node()
 
-
 if selected_horizontal == 'Save':
     select_folder_project()
     file_save = st.session_state['file_node']
     file_code = st.session_state['code']
-    with open(file_save, "w") as f:
-        f.write(file_code)  # save code init file
-        st.info(f'save {file_save}')
-        time.sleep(3)
-    view_code_node()
+    if file_save:
+        with open(file_save, "w") as f:
+            f.write(file_code)  # save code init file
+            st.info(f'save {file_save}')
+        view_code_node()
+    else:
+        st.warning('no file selected')
+
 
 if selected_horizontal == 'New':
-
     if is_file_exist(node):
         st.warning(" node exist , please select Load node")
         time.sleep(4)
@@ -260,7 +250,6 @@ if selected_horizontal == 'New':
         time.sleep(5)
         st.session_state['file_node'] = node_file
         st.session_state['code'] = code_editeur
-
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
