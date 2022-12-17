@@ -45,6 +45,15 @@ if 'folder_project' not in st.session_state:
 if 'folder_streamlit' not in st.session_state:
     st.session_state['folder_streamlit'] = "\n\r".join(os.getcwd().splitlines())  # sauvegarde repertoire streamlit
 
+if 'code' not in st.session_state:
+    st.session_state['code'] = ''
+
+if 'node' not in st.session_state:
+    st.session_state['node'] = ''
+
+if 'file_node' not in st.session_state:
+    st.session_state['file_node'] = ''
+
 # elargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 # charger animation cpu
@@ -131,8 +140,6 @@ with col1:
                     time.sleep(4)
                     placeholder_col1.empty().empty()  # on fait disparaitre les elements
 
-
-
 # creer projet
 with col2:
     placeholder_col2 = st.empty()  # permet de faire disparaitre les elements
@@ -199,17 +206,25 @@ if selected_horizontal == 'Load':
     os.chdir(dir)  # path projet
     loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
-        # bytes_data = loaded_file.getvalue()
         data_code = loaded_file.getvalue().decode('utf-8')
         # affiche le code dans editeur ace
-        code_editeur = st_ace(value=data_code, language='forth', theme='cobalt', font_size=25, key=loaded_file.name)
+        code_editeur = st_ace(value=data_code, language='forth', theme='cobalt', font_size=25, key=loaded_file.name,
+                              auto_update=True)
+        node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+        st.session_state['file_code'] = node_file
+        st.session_state['code'] = code_editeur
 
-        if selected_horizontal == 'Save':
-            with open(loaded_file.getvalue(), "w") as f:
-                f.write(code_editeur)  # save code init file
+if selected_horizontal == 'Save':
+    file_save = st.session_state['file_code']
+    file_code = st.session_state['code']
+    with open(file_save, "w") as f:
+        f.write(file_code)  # save code init file
+        st.write('save')
+        time.sleep(4)
 
 if selected_horizontal == 'New':
-    code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga")
+    code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga",
+                          auto_update=True)
 
     node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
     folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
@@ -221,11 +236,9 @@ if selected_horizontal == 'New':
     with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
         f.write(code_editeur)  # save code to '117.ga'
     time.sleep(5)
-    if selected_horizontal == 'Save':
-        with open(node_file.getvalue(), "w") as f:
-            f.write(code_editeur)  # save code init file
-            st.write('save')
-            time.sleep(5)
+    st.session_state['file_code'] = node_file
+    st.session_state['code'] = code_editeur
+
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
