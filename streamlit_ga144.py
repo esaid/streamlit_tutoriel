@@ -221,9 +221,8 @@ def view_code_node():
 
 # charger fichier *.ga
 if selected_horizontal == 'Load':
-    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-    st.write(dir)
-    os.chdir(dir)  # path projet
+    select_folder_project()
+
     loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
         st.session_state['code'] = loaded_file.getvalue().decode('utf-8')
@@ -233,7 +232,7 @@ if selected_horizontal == 'Load':
 
 if selected_horizontal == 'Save':
     select_folder_project()
-    file_save = st.session_state['file_code']
+    file_save = st.session_state['file_node']
     file_code = st.session_state['code']
     with open(file_save, "w") as f:
         f.write(file_code)  # save code init file
@@ -255,7 +254,7 @@ if selected_horizontal == 'New':
         with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
             f.write(code_editeur)  # save code to '117.ga'
         time.sleep(5)
-        st.session_state['file_code'] = node_file
+        st.session_state['file_node'] = node_file
         st.session_state['code'] = code_editeur
 
 
