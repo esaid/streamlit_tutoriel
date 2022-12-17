@@ -48,8 +48,6 @@ if 'folder_streamlit' not in st.session_state:
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
 
-if 'node' not in st.session_state:
-    st.session_state['node'] = ''
 
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
@@ -199,6 +197,17 @@ if selected_horizontal == 'Home':
     st.write(dir)
     os.chdir(dir)  # path projet
 
+
+def view_code_node():
+    code = st.session_state['code']
+    # affiche le code dans editeur ace
+    code_editeur = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True)
+    node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+    st.session_state['file_code'] = node_file
+    st.session_state['code'] = code_editeur
+
+
+
 # charger fichier *.ga
 if selected_horizontal == 'Load':
     dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
@@ -206,13 +215,10 @@ if selected_horizontal == 'Load':
     os.chdir(dir)  # path projet
     loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
-        data_code = loaded_file.getvalue().decode('utf-8')
-        # affiche le code dans editeur ace
-        code_editeur = st_ace(value=data_code, language='forth', theme='cobalt', font_size=25, key=loaded_file.name,
-                              auto_update=True)
-        node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
-        st.session_state['file_code'] = node_file
-        st.session_state['code'] = code_editeur
+        st.session_state['code'] = loaded_file.getvalue().decode('utf-8')
+        st.write(st.session_state['code'])
+        view_code_node()
+
 
 if selected_horizontal == 'Save':
     file_save = st.session_state['file_code']
@@ -220,12 +226,10 @@ if selected_horizontal == 'Save':
     with open(file_save, "w") as f:
         f.write(file_code)  # save code init file
         st.write('save')
-        time.sleep(4)
+    view_code_node()
 
 if selected_horizontal == 'New':
-    code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, key=f"{node}.ga",
-                          auto_update=True)
-
+    code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, auto_update=True)
     node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
     folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
     st.text(f"Node : {folder_file}")
