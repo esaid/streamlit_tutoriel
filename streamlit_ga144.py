@@ -82,9 +82,11 @@ original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">
 st.markdown(original_title, unsafe_allow_html=True)
 # affichage repertoire fichiers du projet si exisant
 if st.session_state['projet'] is True:
-    file_project_font = '<p style="font-family:Courier; color:Green; font-size: 40px;">f"\n ---->  {files}"</p>'
-    st.write(f"Projet ::  {st.session_state['name_projet']}\n")
-    for files in file_in_folder():
+    project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">Project :: {st.session_state['name_projet']}</p>"""
+    st.markdown(project_font , unsafe_allow_html=True)
+    for file in file_in_folder():
+
+        file_project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">{file}</p>"""
         st.markdown(file_project_font, unsafe_allow_html=True )
 # afficher  animation cpu
 with st.spinner(text="GA144"):
