@@ -67,8 +67,8 @@ st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 # charger animation cpu
 cpu_file = "cpu.json"
 dir_cpu_file = f"{st.session_state['folder_streamlit']}\{cpu_file}"
-os.chdir(st.session_state['folder_streamlit'])  # path streamlit
-st.write(os.getcwd())
+# os.chdir(st.session_state['folder_streamlit'])  # path streamlit
+# st.write(os.getcwd())
 # lottie_cpu = load_lottiefile(cpu_file)
 
 # charger animation ecriture code informatique
@@ -178,8 +178,6 @@ with col2:
             # creation du fichier ini.ga
             with open('init.ga', "w") as f:
                 f.write(init_text)  # save code init file
-            st.write(os.getcwd())
-            st.write(file_in_folder())
             time.sleep(5)
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
