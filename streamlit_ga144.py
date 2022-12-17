@@ -9,6 +9,7 @@ import streamlit as st
 from streamlit_ace import st_ace
 from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
+
 from itertools import cycle
 
 
@@ -61,19 +62,22 @@ if 'serial_port' not in st.session_state:
 
 
 def select_folder_project():
-    directory = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-    os.chdir(directory)  # path projet
+    project_folder = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    st.write(project_folder)
+    os.chdir(project_folder)  # path projet
 
 
 def select_folder_streamlit():
-    directory = "\n\r".join(str(st.session_state['folder_streamlit']).splitlines())
-    os.chdir(directory)  # path projet
+    streamlit_folder = "\n\r".join(str(st.session_state['folder_streamlit']).splitlines())
+    st.write(streamlit_folder)
+    os.chdir(streamlit_folder)  # path projet
 
-
-select_folder_streamlit()
 
 # elargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+
+
+select_folder_streamlit()
 # charger animation cpu
 cpu_file = "cpu.json"
 dir_cpu_file = f"{st.session_state['folder_streamlit']}\{cpu_file}"
@@ -174,7 +178,7 @@ with col2:
                 st.stop()
             select_folder_streamlit()
             st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
-            st.write(os.getcwd())
+
             st.session_state['projet'] = True
             st.session_state['name_projet'] = name_projet
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
@@ -185,7 +189,7 @@ with col2:
             except OSError as errordirectory:
                 st.error(f'This is an error  {errordirectory}', icon="🚨")
                 st.stop()
-            os.chdir(rf"{st.session_state['folder_project']}")  # path projet
+            select_folder_project()
             st.info(f'Create init.ga file in {name_projet}', icon="ℹ️")
             init_text = f"/ {st.session_state['folder_project']}\n"  #
             # creation du fichier ini.ga
@@ -210,6 +214,7 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                   )
 
 if selected_horizontal == 'Home':
+
     select_folder_project()
 
 
