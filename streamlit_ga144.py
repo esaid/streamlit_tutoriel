@@ -30,6 +30,9 @@ def file_in_folder():
     os.chdir(dir)  # path projet
     return sorted(glob.glob("*.ga"))
 
+def is_file_exist(file_):
+    folder = file_in_folder()
+    return file_+'.ga' in folder
 
 # gestion projet
 if 'projet' not in st.session_state:
@@ -229,19 +232,24 @@ if selected_horizontal == 'Save':
     view_code_node()
 
 if selected_horizontal == 'New':
-    code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, auto_update=True)
-    node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
-    folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
-    st.text(f"Node : {folder_file}")
-    time.sleep(5)
-    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-    st.write(dir)
-    os.chdir(dir)  # path projet
-    with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
-        f.write(code_editeur)  # save code to '117.ga'
-    time.sleep(5)
-    st.session_state['file_code'] = node_file
-    st.session_state['code'] = code_editeur
+
+    if is_file_exist(node):
+        st.warning(" node exist , please select Load node")
+        time.sleep(4)
+    else:
+        code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, auto_update=True)
+        node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+        folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
+        st.text(f"Node : {folder_file}")
+        time.sleep(5)
+        dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+        st.write(dir)
+        os.chdir(dir)  # path projet
+        with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
+            f.write(code_editeur)  # save code to '117.ga'
+        time.sleep(5)
+        st.session_state['file_code'] = node_file
+        st.session_state['code'] = code_editeur
 
 
 if selected_vertical_menu == 'About':
