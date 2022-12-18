@@ -76,6 +76,7 @@ def select_folder_streamlit():
 
 def select_Folder_principal():
 
+
     if os.path.exists(master_folder):
         st.session_state['folder_streamlit'] = master_folder
         st.success("Folder validated ")
@@ -186,17 +187,14 @@ with col2:
             st.title('Create Project :')
 
             name_projet = st.text_input('Name Project :  👇')  # nom du projet
-
             if not name_projet:  # gere si on a bien rentre un nom de projet
                 st.warning('Please input a name  project')
                 st.stop()
-            master_folder = st.text_input('Input Master Folder for projects :')
+            master_folder = st.text_input('Input Master Folder for projects :  📗   ')
             if not master_folder:
                 st.warning('Please input a Folder')
                 st.stop()
             select_Folder_principal()
-
-
             st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
 
             st.session_state['projet'] = True
@@ -300,6 +298,10 @@ if selected_vertical_menu == 'Setting-communication':
 
 # gestion Folder principal
 if selected_vertical_menu == 'Setting-Folder':
+    master_folder = st.text_input('Input Master Folder for projects :  📗   ')
+    if not master_folder:
+        st.warning('Please input a Folder')
+        st.stop()
     select_Folder_principal()
 
 # gestion GA144 nodes
