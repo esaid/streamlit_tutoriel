@@ -304,7 +304,8 @@ if selected_vertical_menu == 'Setting-communication':
     st.session_state['serial_port'] = option_port_serial
 
 # gestion GA144 nodes
-my_expander = st.expander(label=f'GA144 Nodes {file_in_folder()} ')
+my_expander = st.expander(label=f"GA144 Nodes {str(file_in_folder()).replace('.ga','').replace('init', '')} ")
+
 
 with my_expander:
     list_node_button = [
