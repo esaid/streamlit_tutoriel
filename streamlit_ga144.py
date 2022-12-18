@@ -27,8 +27,8 @@ def load_lottiefile(filepath: str):
 
 
 def file_in_folder():
-    dir = "\n\r".join(str(st.session_state['folder_project']).splitlines())
-    os.chdir(dir)  # path projet
+    directory = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    os.chdir(directory)  # path projet
     return sorted(glob.glob("*.ga"))
 
 
@@ -125,7 +125,7 @@ with st.spinner(text="GA144"):
 with st.sidebar:
     st_lottie(lottie_cpu, speed=1, height=150)
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-communication', 'About'],
-                                         icons=['house',  'gear'],
+                                         icons=['house', 'gear'],
                                          menu_icon="cast",
                                          default_index=0)
     # selection node par type et numero node
@@ -156,6 +156,7 @@ with st.sidebar:
     node = st.selectbox('Node', list_node)
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
+
 
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
 col1, col2 = st.columns([1, 1])
@@ -219,7 +220,7 @@ with col2:
             # creation du fichier ini.ga
             with open('init.ga', "w") as f:
                 f.write(init_text)  # save code init file
-            time.sleep(5)
+            time.sleep(1)
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
 # menu horizontal
@@ -301,17 +302,10 @@ if selected_vertical_menu == 'Setting-communication':
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
     st.session_state['serial_port'] = option_port_serial
-'''
-# gestion Folder principal
-if selected_vertical_menu == 'Setting-Folder':
-    master_folder = st.text_input('Input Master Folder for projects :  📗   ')
-    if not master_folder:
-        st.warning('Please input a Folder')
-        st.stop()
-    select_Folder_principal()
-'''
+
 # gestion GA144 nodes
-my_expander = st.expander(label='GA144 Nodes')
+my_expander = st.expander(label=f'GA144 Nodes {file_in_folder()} ')
+
 with my_expander:
     list_node_button = [
 
@@ -335,4 +329,8 @@ with my_expander:
 
     cols = cycle(st.columns(18))  # st.columns here since it is out of beta at the time I'm writing this
     for idx, button_node in enumerate(list_node_button):
-        next(cols).button(label=str(button_node))
+        if button_node in str(file_in_folder()): # find nodes
+            type_ = 'primary'
+        else:
+            type_ = 'secondary'
+        next(cols).button(label=str(button_node), type=type_)
