@@ -89,6 +89,7 @@ def select_Folder_principal():
 # elargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
+
 select_folder_streamlit()
 # charger animation cpu
 cpu_file = "cpu.json"
@@ -100,6 +101,7 @@ dir_cpu_file = f"{st.session_state['folder_streamlit']}\{cpu_file}"
 # charger animation ecriture code informatique
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
 lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
+
 col1, col2, col3 = st.columns([1, 1, 1])
 
 # titre avec style css html
