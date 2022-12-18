@@ -124,8 +124,8 @@ with st.spinner(text="GA144"):
 # afficher animation cpu et menu vertical
 with st.sidebar:
     st_lottie(lottie_cpu, speed=1, height=150)
-    selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-Folder', 'Setting-communication', 'About'],
-                                         icons=['house', 'gear', 'gear'],
+    selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-communication', 'About'],
+                                         icons=['house',  'gear'],
                                          menu_icon="cast",
                                          default_index=0)
     # selection node par type et numero node
@@ -195,7 +195,8 @@ with col2:
             if not name_projet:  # gere si on a bien rentre un nom de projet
                 st.warning('Please input a name  project')
                 st.stop()
-            master_folder = st.text_input('Input Master Folder for projects :  📗   ')
+            master_folder = st.text_input(label='Input Master Folder for projects :  📗   ',
+                                          help=st.session_state['folder_principal'])
             if not master_folder:
                 st.warning('Please input a Folder')
                 st.stop()
@@ -283,7 +284,7 @@ if selected_horizontal == 'New':
         select_folder_project()
         with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
             f.write(code_editeur)  # save code to '117.ga'
-        time.sleep(5)
+        time.sleep(1)
         st.session_state['file_node'] = node_file
         st.session_state['code'] = code_editeur
 
@@ -300,7 +301,7 @@ if selected_vertical_menu == 'Setting-communication':
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
     st.session_state['serial_port'] = option_port_serial
-
+'''
 # gestion Folder principal
 if selected_vertical_menu == 'Setting-Folder':
     master_folder = st.text_input('Input Master Folder for projects :  📗   ')
@@ -308,7 +309,7 @@ if selected_vertical_menu == 'Setting-Folder':
         st.warning('Please input a Folder')
         st.stop()
     select_Folder_principal()
-
+'''
 # gestion GA144 nodes
 my_expander = st.expander(label='GA144 Nodes')
 with my_expander:
