@@ -50,7 +50,10 @@ if 'folder_project' not in st.session_state:
 # gestion repertoire streamlit
 if 'folder_streamlit' not in st.session_state:
     # initialisation par defaut
-    st.session_state['folder_streamlit'] = os.path.dirname(__file__) # sauvegarde repertoire streamlit
+    st.session_state['folder_streamlit'] = os.path.dirname(__file__)  # sauvegarde repertoire streamlit
+
+if 'folder_principal' not in st.session_state:
+    st.session_state['folder_principal'] = st.session_state['folder_streamlit']
 
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
@@ -76,7 +79,7 @@ def select_folder_streamlit():
 
 def select_Folder_principal():
     if os.path.exists(master_folder):
-        st.session_state['folder_streamlit'] = master_folder
+        st.session_state['folder_principal'] = master_folder
         st.success("Folder validated ")
         time.sleep(4)
     else:
@@ -90,7 +93,6 @@ def file_exist(file_):
 
 # élargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
-
 
 select_folder_streamlit()
 # charger animation cpu
@@ -203,7 +205,7 @@ with col2:
             st.session_state['projet'] = True
             st.session_state['name_projet'] = name_projet
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
-            st.session_state['folder_project'] = os.path.join(st.session_state['folder_streamlit'],
+            st.session_state['folder_project'] = os.path.join(st.session_state['folder_principal'],
                                                               name_projet)  # chemin repertoire du projet
             try:
                 os.mkdir(st.session_state['folder_project'])  # creation repertoire , avec nom de projet
