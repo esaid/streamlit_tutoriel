@@ -157,7 +157,6 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
 
-
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
 col1, col2 = st.columns([1, 1])
 # charger  projet
@@ -304,8 +303,7 @@ if selected_vertical_menu == 'Setting-communication':
     st.session_state['serial_port'] = option_port_serial
 
 # gestion GA144 nodes
-my_expander = st.expander(label=f"GA144 Nodes {str(file_in_folder()).replace('.ga','').replace('init', '')} ")
-
+my_expander = st.expander(label=f"GA144 Nodes {str(file_in_folder()).replace('.ga', '').replace('init', '')} ")
 
 with my_expander:
     list_node_button = [
@@ -330,8 +328,10 @@ with my_expander:
 
     cols = cycle(st.columns(18))  # st.columns here since it is out of beta at the time I'm writing this
     for idx, button_node in enumerate(list_node_button):
-        if button_node in str(file_in_folder()): # find nodes
+        if button_node in str(file_in_folder()):  # find nodes
             type_ = 'primary'
+            help_ = 'in use'
         else:
             type_ = 'secondary'
-        next(cols).button(label=str(button_node), type=type_)
+            help_ = ''
+        next(cols).button(label=str(button_node), type=type_, help=help_)
