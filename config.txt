@@ -1,0 +1,2 @@
+/home/esaid/PycharmProjects/streamlit_tutoriel
+/dev/ttyUSB0

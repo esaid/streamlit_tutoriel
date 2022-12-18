@@ -50,7 +50,7 @@ if 'folder_project' not in st.session_state:
 # gestion repertoire streamlit
 if 'folder_streamlit' not in st.session_state:
     # initialisation par defaut
-    st.session_state['folder_streamlit'] = "\n\r".join(os.getcwd().splitlines())  # sauvegarde repertoire streamlit
+    st.session_state['folder_streamlit'] = os.path.dirname(__file__) # sauvegarde repertoire streamlit
 
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
@@ -75,8 +75,6 @@ def select_folder_streamlit():
 
 
 def select_Folder_principal():
-
-
     if os.path.exists(master_folder):
         st.session_state['folder_streamlit'] = master_folder
         st.success("Folder validated ")
@@ -86,7 +84,11 @@ def select_Folder_principal():
         st.stop()
 
 
-# elargir la page
+def file_exist(file_):
+    return os.path.exists(file_) and os.stat(file_).st_size == 0
+
+
+# élargir la page
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 
@@ -94,9 +96,8 @@ select_folder_streamlit()
 # charger animation cpu
 cpu_file = "cpu.json"
 dir_cpu_file = f"{st.session_state['folder_streamlit']}\{cpu_file}"
-# os.chdir(st.session_state['folder_streamlit'])  # path streamlit
-# st.write(os.getcwd())
-# lottie_cpu = load_lottiefile(cpu_file)
+
+lottie_cpu = load_lottiefile(cpu_file)
 
 # charger animation ecriture code informatique
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
@@ -120,7 +121,7 @@ with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
 # afficher animation cpu et menu vertical
 with st.sidebar:
-    # st_lottie(lottie_cpu, speed=1, height=150)
+    st_lottie(lottie_cpu, speed=1, height=150)
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-Folder', 'Setting-communication', 'About'],
                                          icons=['house', 'gear', 'gear'],
                                          menu_icon="cast",
