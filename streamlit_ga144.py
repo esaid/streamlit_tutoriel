@@ -12,6 +12,37 @@ from streamlit_option_menu import option_menu
 
 from itertools import cycle
 
+GPIO = ('600', '500', '217', '317', '417', '517', '715')
+Analog = ('117', '617', '717', '713', '709')
+
+CLK = ('300', '001', '701')
+DATA = ('300', '001', '701')
+Internal = (
+    '002', '003', '004', '005', '006', '010', '011', '012', '013', '014', '015', '016', '017', '101', '102', '103',
+    '104', '105', '106', '107',
+    '108', '109', '110', '111', '112', '113', '114', '115', '116', '201', '202', '203', '204', '205', '206', '207',
+    '208', '209', '210', '211', '212',
+    '213', '214', '215', '216', '300', '301', '302', '303', '304', '305', '306', '307', '308', '309', '310', '311',
+    '312', '313', '314', '315', '316',
+    '400', '401', '402', '403', '404', '405', '406', '407', '408', '409', '410', '411', '412', '413', '414', '415',
+    '416',
+    '501', '502', '503', '504', '505', '506', '507', '508', '509', '510', '511', '512', '513', '514', '515', '516',
+    '601', '602', '603', '604', '605', '606', '607', '608', '609', '610', '611', '612', '613', '614', '615', '616',
+    '700', '701', '702', '703', '704', '706', '707', '708', '710', '711', '712', '714', '716')
+
+
+def find_fonction_node(node_):
+    if node_ in GPIO:
+        return 'GPIO'
+    if node_ in Analog:
+        return 'Analog'
+    if node_ in CLK:
+        return 'CLK'
+    if node_ in DATA:
+        return 'DATA'
+    if node_ in Internal:
+        return 'Internal'
+
 
 # lottie url file
 def load_lottieurl(url: str):
@@ -129,6 +160,7 @@ with st.sidebar:
                                          menu_icon="cast",
                                          default_index=0)
     # selection node par type et numero node
+
     node_type = st.selectbox(
         'Node Type Selection :',
         ('NODE', 'GPIO', 'Analog-In', 'Analog-Out', 'CLK', 'DATA', 'Internal'))
@@ -136,9 +168,9 @@ with st.sidebar:
     list_node = ''
     if node_type == 'GPIO':
         list_node = '600', '500', '217', '317', '417', '517', '715'
-    if node_type == 'Analog-In':
+    if node_type == 'Analog_In':
         list_node = '117', '617', '717', '713', '709'
-    if node_type == 'Analog-Out':
+    if node_type == 'Analog_Out':
         list_node = '117', '617', '717', '713', '709'
     if node_type == 'CLK':
         list_node = '300', '001', '701'
@@ -330,7 +362,7 @@ with my_expander:
     for idx, button_node in enumerate(list_node_button):
         if button_node in str(file_in_folder()):  # find nodes
             type_ = 'primary'
-            help_ = 'in use'
+            help_ = find_fonction_node(button_node)
         else:
             type_ = 'secondary'
             help_ = ''
