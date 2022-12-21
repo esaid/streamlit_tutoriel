@@ -9,7 +9,6 @@ import streamlit as st
 from streamlit_ace import st_ace
 from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
-
 from itertools import cycle
 
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
@@ -149,7 +148,6 @@ with col3:
         file_project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">{', '.join(file_in_folder())}</p>"""
         st.markdown(file_project_font, unsafe_allow_html=True)
 
-
 # afficher  animation cpu
 with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
@@ -157,7 +155,7 @@ with st.spinner(text="GA144"):
 with st.sidebar:
     st_lottie(lottie_cpu, speed=1, height=150)
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-communication', 'About'],
-                                         icons=['house', 'gear'],
+                                         icons=['house', 'motherboard','question'],
                                          menu_icon="cast",
                                          default_index=0)
     # selection node par type et numero node
@@ -183,6 +181,24 @@ with st.sidebar:
     node = st.selectbox('Node', list_node)
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
+
+    selected_horizontal_cpu = option_menu(None, ["Compilation", "Send"],
+                                          icons=['gear', 'caret-down-square-fill'],
+                                          menu_icon="cast", default_index=0, orientation="vertical",
+                                          styles={
+                                              "container": {"padding": "0!important", "background-color": "#fafafa"},
+                                              "icon": {"color": "orange", "font-size": "25px"},
+                                              "nav-link": {"font-size": "25px", "text-align": "left", "margin": "0px",
+                                                           "--hover-color": "#eee"},
+                                              "nav-link-selected": {"background-color": "green"},
+                                          }
+                                          )
+if selected_horizontal_cpu == "Compilation":
+    st.info(f"compilation {st.session_state['name_projet']}" , icon="ℹ️")
+
+if selected_horizontal_cpu == "Send":
+    st.info(f"Send program to board !" , icon="ℹ️")
+
 
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
 col1, col2 = st.columns([1, 1])
@@ -250,7 +266,7 @@ with col2:
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
 # menu horizontal
-selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
+selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save','Restart'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
                                          'bi-file-earmark-arrow-up-fill',
                                          ],
@@ -263,6 +279,10 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save'],
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
+
+
+if selected_horizontal == 'Restart':
+    st.warning('Press F5 or refresh the web page', icon='⚠')
 
 if selected_horizontal == 'Home':
     select_folder_project()
