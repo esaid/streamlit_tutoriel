@@ -30,6 +30,15 @@ Internal = (
     '700', '701', '702', '703', '704', '706', '707', '708', '710', '711', '712', '714', '716')
 
 
+def bar_progression(progress, t):
+    percent_complete = 0
+    my_bar = st.progress(percent_complete)
+    while percent_complete < 100:
+        percent_complete += progress
+        time.sleep(t)
+        my_bar.progress(percent_complete)
+
+
 def find_fonction_node(node_):
     if node_ in GPIO:
         return 'GPIO'
@@ -153,9 +162,9 @@ with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
 # afficher animation cpu et menu vertical
 with st.sidebar:
-    st_lottie(lottie_cpu, speed=1, height=150)
+
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-communication', 'About'],
-                                         icons=['house', 'motherboard','question'],
+                                         icons=['house', 'motherboard', 'question'],
                                          menu_icon="cast",
                                          default_index=0)
     # selection node par type et numero node
@@ -181,10 +190,10 @@ with st.sidebar:
     node = st.selectbox('Node', list_node)
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
-
-    selected_horizontal_cpu = option_menu(None, ["Compilation", "Send"],
-                                          icons=['gear', 'caret-down-square-fill'],
-                                          menu_icon="cast", default_index=0, orientation="vertical",
+    st_lottie(lottie_cpu, speed=1, height=150)
+    selected_horizontal_cpu = option_menu(None, ["","Compilation", "Send"],
+                                          icons=['','gear', 'caret-down-square-fill'],
+                                          menu_icon="cast", default_index=0, orientation="horizontal",
                                           styles={
                                               "container": {"padding": "0!important", "background-color": "#fafafa"},
                                               "icon": {"color": "orange", "font-size": "25px"},
@@ -193,11 +202,14 @@ with st.sidebar:
                                               "nav-link-selected": {"background-color": "green"},
                                           }
                                           )
-if selected_horizontal_cpu == "Compilation":
-    st.info(f"compilation {st.session_state['name_projet']}" , icon="ℹ️")
+    if selected_horizontal_cpu == "Compilation":
+        st.info(f"compilation {st.session_state['name_projet']}", icon="ℹ️")
+        bar_progression(1,0.1)
 
-if selected_horizontal_cpu == "Send":
-    st.info(f"Send program to board !" , icon="ℹ️")
+    if selected_horizontal_cpu == "Send":
+        st.info(f"Send program to board !", icon="ℹ️")
+        bar_progression(5,0.1)
+
 
 
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
@@ -266,7 +278,7 @@ with col2:
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
 # menu horizontal
-selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save','Restart'],
+selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save', 'Restart'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
                                          'bi-file-earmark-arrow-up-fill',
                                          ],
@@ -279,7 +291,6 @@ selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save','Restart'
                                       "nav-link-selected": {"background-color": "green"},
                                   }
                                   )
-
 
 if selected_horizontal == 'Restart':
     st.warning('Press F5 or refresh the web page', icon='⚠')
