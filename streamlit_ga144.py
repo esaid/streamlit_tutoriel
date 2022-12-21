@@ -152,7 +152,9 @@ st.markdown(original_title, unsafe_allow_html=True)
 with col3:
     # affichage repertoire fichiers du projet si exisant
     if st.session_state['projet'] is True:
-        project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">Project :: {st.session_state['name_projet']}</p>"""
+        st.metric("--- Nodes ---", "100%", f"{len(file_in_folder())-1} %")
+        st.write('\n')
+        project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">  Project :: {st.session_state['name_projet']}</p>"""
         st.markdown(project_font, unsafe_allow_html=True)
         file_project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">{', '.join(file_in_folder())}</p>"""
         st.markdown(file_project_font, unsafe_allow_html=True)
@@ -202,13 +204,16 @@ with st.sidebar:
                                               "nav-link-selected": {"background-color": "green"},
                                           }
                                           )
+
     if selected_horizontal_cpu == "Compilation":
         st.info(f"compilation {st.session_state['name_projet']}", icon="ℹ️")
-        bar_progression(1,0.1)
+        bar_progression(2,0.1)
+
 
     if selected_horizontal_cpu == "Send":
         st.info(f"Send program to board !", icon="ℹ️")
         bar_progression(5,0.1)
+
 
 
 
