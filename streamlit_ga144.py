@@ -149,9 +149,11 @@ col1, col2, col3 = st.columns([1, 1, 1])
 # titre avec style css html
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
+
 with col3:
     # affichage repertoire fichiers du projet si exisant
     if st.session_state['projet'] is True:
+
         st.metric("--- Nodes ---", "100%", f"{len(file_in_folder())-1} %")
         st.write('\n')
         project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">  Project :: {st.session_state['name_projet']}</p>"""
@@ -198,8 +200,8 @@ with st.sidebar:
                                           menu_icon="cast", default_index=0, orientation="horizontal",
                                           styles={
                                               "container": {"padding": "0!important", "background-color": "#fafafa"},
-                                              "icon": {"color": "orange", "font-size": "25px"},
-                                              "nav-link": {"font-size": "25px", "text-align": "left", "margin": "0px",
+                                              "icon": {"color": "orange", "font-size": "18px"},
+                                              "nav-link": {"font-size": "18px", "text-align": "left", "margin": "2px",
                                                            "--hover-color": "#eee"},
                                               "nav-link-selected": {"background-color": "green"},
                                           }
