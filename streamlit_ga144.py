@@ -154,7 +154,7 @@ with col3:
     # affichage repertoire fichiers du projet si exisant
     if st.session_state['projet'] is True:
 
-        st.metric("--- Nodes ---", "100%", f"{len(file_in_folder())-1} %")
+        st.metric("--- Nodes ---", "144", f"{len(file_in_folder())-1} nodes")
         st.write('\n')
         project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">  Project :: {st.session_state['name_projet']}</p>"""
         st.markdown(project_font, unsafe_allow_html=True)
