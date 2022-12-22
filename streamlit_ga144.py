@@ -11,7 +11,6 @@ from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
 
-
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
 Analog = ('117', '617', '717', '713', '709')
 
@@ -66,6 +65,7 @@ def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
         return json.load(f)
 
+
 def file_in_folder():
     directory = "\n\r".join(str(st.session_state['folder_project']).split())
     os.chdir(directory)  # path projet
@@ -94,6 +94,10 @@ if 'folder_streamlit' not in st.session_state:
 
 if 'folder_principal' not in st.session_state:
     st.session_state['folder_principal'] = st.session_state['folder_streamlit']
+
+# gestion Lib
+if 'lib' not in st.session_state:
+    st.session_state['lib'] = False
 
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
@@ -145,17 +149,16 @@ lottie_cpu = load_lottiefile(cpu_file)
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
 lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
 
-col1, col2, col3 = st.columns([1, 1, 1])
+col4, col5, col6 = st.columns(3)
 
 # titre avec style css html
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
 
-with col3:
+with col6:
     # affichage repertoire fichiers du projet si exisant
     if st.session_state['projet'] is True:
-
-        st.metric("--- Nodes ---", "144", f"{len(file_in_folder())-1} nodes")
+        st.metric("--- Nodes ---", "144", f"{len(file_in_folder()) - 1} nodes")
         st.write('\n')
         project_font = f"""<style>p.a {{ font: bold 15px Courier;}}</style><p class="a">  Project :: {st.session_state['name_projet']}</p>"""
         st.markdown(project_font, unsafe_allow_html=True)
@@ -167,7 +170,6 @@ with st.spinner(text="GA144"):
     st_lottie(lottie_jsonGA144, height=150, key="loading_gif")
 # afficher animation cpu et menu vertical
 with st.sidebar:
-
     selected_vertical_menu = option_menu("Main Menu", ["Home", 'Setting-communication', 'About'],
                                          icons=['house', 'motherboard', 'question'],
                                          menu_icon="cast",
@@ -196,8 +198,8 @@ with st.sidebar:
     st.write('NODE Type selected:', node_type)
     st.write('NODE selected:', node)
     st_lottie(lottie_cpu, speed=1, height=150)
-    selected_horizontal_cpu = option_menu(None, ["","Compilation", "Send"],
-                                          icons=['','gear', 'caret-down-square-fill'],
+    selected_horizontal_cpu = option_menu(None, ["", "Compilation", "Send"],
+                                          icons=['', 'gear', 'caret-down-square-fill'],
                                           menu_icon="cast", default_index=0, orientation="horizontal",
                                           styles={
                                               "container": {"padding": "0!important", "background-color": "#fafafa"},
@@ -210,18 +212,30 @@ with st.sidebar:
 
     if selected_horizontal_cpu == "Compilation":
         st.info(f"compilation {st.session_state['name_projet']}", icon="ℹ️")
-        bar_progression(2,0.1)
-
+        bar_progression(2, 0.1)
 
     if selected_horizontal_cpu == "Send":
         st.info(f"Send program to board !", icon="ℹ️")
-        bar_progression(5,0.1)
-
-
-
+        bar_progression(5, 0.1)
 
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
-col1, col2 = st.columns([1, 1])
+col1, col2, col3 = st.columns(3)
+
+with col3:
+    placeholder_col3 = st.empty()  # permet de faire disparaitre les elements
+    with placeholder_col3.container():
+        # si pas de projet , on sélectionne le repertoire et fichier ini.ga
+        if st.session_state['lib'] is False:
+            st.title('Library :')
+            select_Lib = st.file_uploader("Lib : Choose a file in Library folder ", type=['ga'])
+            st.warning('Please select a file ')
+            if select_Lib:
+                st.info(f"file {select_Lib.name} selected")
+                st.session_state['lib'] = True
+                time.sleep(4)
+                placeholder_col3.empty().empty()  # on fait disparaitre les elements
+
+
 # charger  projet
 with col1:
     placeholder_col1 = st.empty()  # permet de faire disparaitre les elements
@@ -243,7 +257,9 @@ with col1:
                     # st.write(name_projet)
                     # st.write(file_in_folder())
                     time.sleep(4)
-                    placeholder_col1.empty().empty()  # on fait disparaitre les elements
+                    placeholder_col3.empty().empty()  # clear
+                    placeholder_col1.empty().empty()
+
 
 # creer projet
 with col2:
@@ -283,8 +299,13 @@ with col2:
             with open('init.ga', "w") as f:
                 f.write(init_text)  # save code init file
             time.sleep(1)
+            placeholder_col3.empty().empty()  # clear
             placeholder_col2.empty().empty()  # clear
             placeholder_col1.empty().empty()
+
+
+
+
 # menu horizontal
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save', 'Restart'],
                                   icons=['house', 'plus-square', 'bi-file-earmark-arrow-down-fill',
