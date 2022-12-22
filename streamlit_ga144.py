@@ -66,7 +66,7 @@ def load_lottiefile(filepath: str):
 
 
 def file_in_folder():
-    directory = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    directory = "\n\r".join(str(st.session_state['folder_project']).split())
     os.chdir(directory)  # path projet
     return sorted(glob.glob("*.ga"))
 
@@ -105,13 +105,13 @@ if 'serial_port' not in st.session_state:
 
 
 def select_folder_project():
-    project_folder = "\n\r".join(str(st.session_state['folder_project']).splitlines())
+    project_folder = "\n\r".join(str(st.session_state['folder_project']).split())
     st.write(project_folder)
     os.chdir(project_folder)  # path projet
 
 
 def select_folder_streamlit():
-    streamlit_folder = "\n\r".join(str(st.session_state['folder_streamlit']).splitlines())
+    streamlit_folder = "\n\r".join(str(st.session_state['folder_streamlit']).split())
     st.write(streamlit_folder)
     os.chdir(streamlit_folder)  # path projet
 
