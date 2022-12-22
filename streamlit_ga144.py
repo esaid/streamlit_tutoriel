@@ -11,6 +11,7 @@ from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
 
+
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
 Analog = ('117', '617', '717', '713', '709')
 
@@ -37,6 +38,7 @@ def bar_progression(progress, t):
         percent_complete += progress
         time.sleep(t)
         my_bar.progress(percent_complete)
+    my_bar.empty()
 
 
 def find_fonction_node(node_):
