@@ -64,7 +64,6 @@ def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
         return json.load(f)
 
-
 def file_in_folder():
     directory = "\n\r".join(str(st.session_state['folder_project']).split())
     os.chdir(directory)  # path projet
