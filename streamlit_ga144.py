@@ -221,6 +221,7 @@ with st.sidebar:
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
 col1, col2, col3 = st.columns(3)
 
+
 with col3:
     placeholder_col3 = st.empty()  # permet de faire disparaitre les elements
     with placeholder_col3.container():
