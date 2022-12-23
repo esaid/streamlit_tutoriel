@@ -95,9 +95,13 @@ if 'folder_streamlit' not in st.session_state:
 if 'folder_principal' not in st.session_state:
     st.session_state['folder_principal'] = st.session_state['folder_streamlit']
 
+if 'menu_gestion_projet' not in st.session_state:
+    st.session_state['menu_gestion_projet'] = False
+
 # gestion Lib
-if 'lib' not in st.session_state:
-    st.session_state['lib'] = False
+
+if 'folder_lib' not in st.session_state:
+    st.session_state['folder_lib'] = st.session_state['folder_streamlit'] + "/lib"
 
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
@@ -131,6 +135,16 @@ def select_Folder_principal():
         st.stop()
 
 
+def select_Folder_Lib(folder_):
+    if os.path.exists(folder_):
+        st.session_state['folder_pLibrary'] = folder_
+        st.success("Folder validated ")
+        time.sleep(4)
+    else:
+        st.warning('error Folder not found...')
+        st.stop()
+
+
 def file_exist(file_):
     return os.path.exists(file_) and os.stat(file_).st_size == 0
 
@@ -139,9 +153,10 @@ def file_exist(file_):
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 select_folder_streamlit()
+st.write(st.session_state['folder_lib'])
 # charger animation cpu
 cpu_file = "cpu.json"
-dir_cpu_file = f"{st.session_state['folder_streamlit']}\{cpu_file}"
+dir_cpu_file = f"{st.session_state['folder_streamlit']}{cpu_file}"
 
 lottie_cpu = load_lottiefile(cpu_file)
 
@@ -149,13 +164,12 @@ lottie_cpu = load_lottiefile(cpu_file)
 lottie_urlGA144 = "https://assets9.lottiefiles.com/packages/lf20_xafe7wbh.json"
 lottie_jsonGA144 = load_lottieurl(lottie_urlGA144)
 
-col4, col5, col6 = st.columns(3)
-
 # titre avec style css html
 original_title = '<p style="font-family:Courier; color:Green; font-size: 40px;">GA144 FORTH</p>'
 st.markdown(original_title, unsafe_allow_html=True)
 
-with col6:
+col1, col2, col3 = st.columns(3)
+with col3:
     # affichage repertoire fichiers du projet si exisant
     if st.session_state['projet'] is True:
         st.metric("--- Nodes ---", "144", f"{len(file_in_folder()) - 1} nodes")
@@ -218,94 +232,62 @@ with st.sidebar:
         st.info(f"Send program to board !", icon="ℹ️")
         bar_progression(5, 0.1)
 
+col1, col2 = st.columns(2)
 # col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
-col1, col2, col3 = st.columns(3)
-
-
-with col3:
-    placeholder_col3 = st.empty()  # permet de faire disparaitre les elements
-    with placeholder_col3.container():
-        # si pas de projet , on sélectionne le repertoire et fichier ini.ga
-        if st.session_state['lib'] is False:
-            st.title('Library :')
-            select_Lib = st.file_uploader("Lib : Choose a file in Library folder ", type=['ga'])
-            st.warning('Please select a file ')
-            if select_Lib:
-                st.info(f"file {select_Lib.name} selected")
-                st.session_state['lib'] = True
-                time.sleep(4)
-                placeholder_col3.empty().empty()  # on fait disparaitre les elements
-
-
 # charger  projet
 with col1:
-    placeholder_col1 = st.empty()  # permet de faire disparaitre les elements
-    with placeholder_col1.container():
-        # si pas de projet , on sélectionne le repertoire et fichier ini.ga
-        if st.session_state['projet'] is False:
-            st.title('Load Project :')
-            select_projet = st.file_uploader("Choose a file init.ga in project folder ", type=['ga'])
-            st.warning('Please select a file init.ga')
-            if select_projet:
-                if select_projet.name == 'init.ga':
-                    st.info("file init.ga' selected")
+    # si pas de projet , on sélectionne le repertoire et fichier ini.ga
+    if st.session_state['projet'] is False:
+        st.header('Load Project :')
+        select_projet = st.file_uploader("Choose a file init.ga in project folder ", type=['ga'])
+        st.warning('Please select a file init.ga')
+        if select_projet:
+            if select_projet.name == 'init.ga':
+                st.info("file init.ga' selected")
 
-                    st.session_state['projet'] = True
-                    directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
-                    st.session_state['folder_project'] = directory_project
-                    name_projet = directory_project[directory_project.rindex('/') + 1:]
-                    st.session_state['name_projet'] = name_projet
-                    # st.write(name_projet)
-                    # st.write(file_in_folder())
-                    time.sleep(4)
-                    placeholder_col3.empty().empty()  # clear
-                    placeholder_col1.empty().empty()
-
+                st.session_state['projet'] = True
+                directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
+                st.session_state['folder_project'] = directory_project
+                name_projet = directory_project[directory_project.rindex('/') + 1:]
+                st.session_state['name_projet'] = name_projet
+                # st.write(name_projet)
+                # st.write(file_in_folder())
+                time.sleep(1)
 
 # creer projet
 with col2:
-    placeholder_col2 = st.empty()  # permet de faire disparaitre les elements
-    with placeholder_col2.container():
-        # si pas de projet  , creation du projet
-        if st.session_state['projet'] is False:
+    # si pas de projet  , creation du projet
+    if st.session_state['projet'] is False:
+        st.header('Create Project :')
+        name_projet = st.text_input('Name Project :  👇')  # nom du projet
+        if not name_projet:  # gere si on a bien rentre un nom de projet
+            st.warning('Please input a name  project')
+            st.stop()
+        master_folder = st.text_input(label='Input Master Folder for projects :  📗   ',
+                                      help=st.session_state['folder_principal'])
+        if not master_folder:
+            st.warning('Please input a Folder')
+            st.stop()
+        select_Folder_principal()
+        st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
 
-            st.title('Create Project :')
-
-            name_projet = st.text_input('Name Project :  👇')  # nom du projet
-            if not name_projet:  # gere si on a bien rentre un nom de projet
-                st.warning('Please input a name  project')
-                st.stop()
-            master_folder = st.text_input(label='Input Master Folder for projects :  📗   ',
-                                          help=st.session_state['folder_principal'])
-            if not master_folder:
-                st.warning('Please input a Folder')
-                st.stop()
-            select_Folder_principal()
-            st.write(f"Current working directory: {st.session_state['folder_streamlit']}")  # folder courant
-
-            st.session_state['projet'] = True
-            st.session_state['name_projet'] = name_projet
-            st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
-            st.session_state['folder_project'] = os.path.join(st.session_state['folder_principal'],
-                                                              name_projet)  # chemin repertoire du projet
-            try:
-                os.mkdir(st.session_state['folder_project'])  # creation repertoire , avec nom de projet
-            except OSError as errordirectory:
-                st.error(f'This is an error  {errordirectory}', icon="🚨")
-                st.stop()
-            select_folder_project()
-            st.info(f'Create init.ga file in {name_projet}', icon="ℹ️")
-            init_text = f"/ {st.session_state['folder_project']}\n"  #
-            # creation du fichier ini.ga
-            with open('init.ga', "w") as f:
-                f.write(init_text)  # save code init file
-            time.sleep(1)
-            placeholder_col3.empty().empty()  # clear
-            placeholder_col2.empty().empty()  # clear
-            placeholder_col1.empty().empty()
-
-
-
+        st.session_state['projet'] = True
+        st.session_state['name_projet'] = name_projet
+        st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
+        st.session_state['folder_project'] = os.path.join(st.session_state['folder_principal'],
+                                                          name_projet)  # chemin repertoire du projet
+        try:
+            os.mkdir(st.session_state['folder_project'])  # creation repertoire , avec nom de projet
+        except OSError as errordirectory:
+            st.error(f'This is an error  {errordirectory}', icon="🚨")
+            st.stop()
+        select_folder_project()
+        st.info(f'Create init.ga file in {name_projet}', icon="ℹ️")
+        init_text = f"/ {st.session_state['folder_project']}\n"  #
+        # creation du fichier ini.ga
+        with open('init.ga', "w") as f:
+            f.write(init_text)  # save code init file
+        time.sleep(1)
 
 # menu horizontal
 selected_horizontal = option_menu(None, ["Home", "New", "Load", 'Save', 'Restart'],
@@ -368,7 +350,7 @@ if selected_horizontal == 'New':
         node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
         folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
         st.text(f"Node : {folder_file}")
-        time.sleep(5)
+        time.sleep(1)
         select_folder_project()
         with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
             f.write(code_editeur)  # save code to '117.ga'
