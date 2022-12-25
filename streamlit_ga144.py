@@ -346,7 +346,7 @@ if selected_horizontal == 'Save':
         st.warning('no file selected')
 
 if selected_horizontal == 'New':
-    if is_file_exist(node):
+    if is_file_exist(node):  # node existant ?
         st.warning(f" node {node} exist , please select Load node")
         time.sleep(1)
 
@@ -360,7 +360,7 @@ if selected_horizontal == 'New':
         st.text(f"Node : {folder_file}")
         st.session_state['file_node'] = node_file
         st.session_state['code'] = code_editeur
-        st.stop() # attente save
+        st.stop()  # attente save
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
