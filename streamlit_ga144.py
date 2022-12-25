@@ -106,6 +106,9 @@ if 'folder_lib' not in st.session_state:
 if 'code' not in st.session_state:
     st.session_state['code'] = ''
 
+if 'node' not in st.session_state:
+    st.session_state['node'] = ''
+
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
 
@@ -314,12 +317,11 @@ if selected_horizontal == 'Home':
 def view_code_node():
     code = st.session_state['code']
     # affiche le code dans editeur ace
-    code_editeur = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True , key='view')
+    code_editeur = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
     node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
     st.session_state['file_node'] = node_file
     st.session_state['code'] = code_editeur
     return code_editeur
-
 
 
 # charger fichier *.ga
@@ -345,23 +347,20 @@ if selected_horizontal == 'Save':
 
 if selected_horizontal == 'New':
     if is_file_exist(node):
-        st.warning(" node exist , please select Load node")
-        time.sleep(4)
+        st.warning(f" node {node} exist , please select Load node")
+        time.sleep(1)
+
     else:
         st.session_state['code'] = f"node {node}\n"
-        code_editeur =view_code_node()
-        #code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, auto_update=True , key='new')
+        # code_editeur = view_code_node()
+        code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, auto_update=True,
+                              key='new')
         node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
         folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
         st.text(f"Node : {folder_file}")
-        time.sleep(2)
-        select_folder_project()
-        with open(node_file, "w") as f:  # sauvegarde dans le repertoire projet le fichier node.ga
-            f.write(code_editeur)  # save code to '117.ga'
-        time.sleep(1)
         st.session_state['file_node'] = node_file
         st.session_state['code'] = code_editeur
-
+        st.stop() # attente save
 
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
