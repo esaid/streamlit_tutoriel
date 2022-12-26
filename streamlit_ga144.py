@@ -161,16 +161,6 @@ def select_Folder_principal():
         st.stop()
 
 
-def select_Folder_Lib(folder_):
-    if os.path.exists(folder_):
-        st.session_state['folder_pLibrary'] = folder_
-        st.success("Folder validated ")
-        time.sleep(4)
-    else:
-        st.warning('error Folder not found...')
-        st.stop()
-
-
 def file_exist(file_):
     return os.path.exists(file_) and os.stat(file_).st_size == 0
 
@@ -485,6 +475,7 @@ with expander_compilation:
         stderr_text = stderr_f.getvalue()
         stderr.text(stderr_text)
 
+
 expander_send = st.expander(label=f"GA144 send  ")
 
 with expander_send:
@@ -508,3 +499,4 @@ with expander_send:
         stderr_text = stderr_f.getvalue()
         stderr.text(stderr_text)
         st.session_state['send'] = False
+        st.write('end send')
