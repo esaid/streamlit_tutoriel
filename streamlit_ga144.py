@@ -9,6 +9,11 @@ from streamlit_ace import st_ace
 from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
+from contextlib import redirect_stdout, redirect_stderr
+import io
+import sys
+import subprocess
+import traceback
 
 
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
@@ -66,6 +71,11 @@ def load_lottiefile(filepath: str):
         return json.load(f)
 
 
+def read_file(name_file):
+    with open(name_file, "r") as file_:
+        return file_.read()
+
+
 def concatenation_in_onefile(new_file, list_files):
     with open(new_file, "w") as new_file:
         for name in list_files:
@@ -74,6 +84,7 @@ def concatenation_in_onefile(new_file, list_files):
                     new_file.write(line)
 
                 new_file.write("\n")
+
 
 
 def file_in_folder():
@@ -118,6 +129,10 @@ if 'code' not in st.session_state:
 
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
+
+
+if 'compilation_file' not in st.session_state:
+    st.session_state['compilation_file'] = ''
 
 if 'serial_port' not in st.session_state:
     st.session_state['serial_port'] = ''
@@ -240,7 +255,8 @@ with st.sidebar:
         # save name_projet.Cga  (Compilationga)
         l = file_in_folder()
         l = l[-1:] + l[:-1]  # init.ga premier element pour gerer  require
-        concatenation_in_onefile(st.session_state['name_projet'] + '.Cga', l)
+        st.session_state['compilation_file'] = st.session_state['name_projet'] + '.Cga'
+        concatenation_in_onefile(st.session_state['compilation_file'], l)
         st.stop()
 
     if selected_horizontal_cpu == "Send":
@@ -434,3 +450,18 @@ with my_expander:
             type_ = 'secondary'
             help_ = ''
         next(cols).button(label=str(button_node), type=type_, help=help_)
+
+
+
+stdout, stderr = st.columns(2)
+with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
+    try:
+
+        good_process = subprocess.run(["python", "--version"], capture_output=True, text=True)
+        print(read_file(st.session_state['compilation_file']))
+        stdout_f.write(good_process.stdout)
+    except Exception as e:
+        traceback.print_exc()
+        traceback.print_exc(file=sys.stdout) # or sys.stdout
+stdout_text = stdout_f.getvalue()
+stdout.text(stdout_text)
