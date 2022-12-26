@@ -10,6 +10,7 @@ from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
 
+
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
 Analog = ('117', '617', '717', '713', '709')
 
@@ -238,7 +239,7 @@ with st.sidebar:
         bar_progression(5, 0.1)
         # save name_projet.Cga  (Compilationga)
         l = file_in_folder()
-        l = l[-1:] + l[:-1] # init.ga premier element pour gerer  require
+        l = l[-1:] + l[:-1]  # init.ga premier element pour gerer  require
         concatenation_in_onefile(st.session_state['name_projet'] + '.Cga', l)
         st.stop()
 
@@ -305,7 +306,7 @@ with col2:
                 st.stop()
             select_folder_project()
             st.info(f'Create init.ga file in {name_projet}', icon="ℹ️")
-            init_text = f"/ {st.session_state['folder_project']}\n"  #
+            init_text = f"\ {st.session_state['folder_project']}\n"  #
             # creation du fichier ini.ga
             with open('init.ga', "w") as f:
                 f.write(init_text)  # save code init file
@@ -337,33 +338,37 @@ if selected_horizontal == 'Home':
 def view_code_node():
     code = st.session_state['code']
     # affiche le code dans editeur ace
-    code_editeur = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
-    node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
-    st.session_state['file_node'] = node_file
-    st.session_state['code'] = code_editeur
-    return code_editeur
+    code_edit = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
+    # node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+    # st.session_state['file_node'] = node_file
+    st.session_state['code'] = code_edit
+    return code_edit
 
 
 # charger fichier *.ga
 if selected_horizontal == 'Load':
-    select_folder_project()
-    loaded_file = st.file_uploader("Choose a file", type='ga')
+    # select_folder_project()
+    loaded_file = st.file_uploader("Choose a file", type='ga' )
     if loaded_file:
+
+        st.session_state['file_node'] = loaded_file.name
+        # st.write('file : ', st.session_state['file_node'])
         st.session_state['code'] = loaded_file.getvalue().decode('utf-8')
-        st.write(st.session_state['code'])
         view_code_node()
+        st.stop()
 
 if selected_horizontal == 'Save':
     select_folder_project()
     file_save = st.session_state['file_node']
+    # st.write('file : ', st.session_state['file_node'])
     file_code = st.session_state['code']
-    if file_save:
-        with open(file_save, "w") as f:
-            f.write(file_code)  # save code init file
-            st.info(f'save {file_save}')
+    # st.write(st.session_state['code'])
+    # st.write(file_save)
+    with open(file_save, "w") as f:
+        f.write(file_code)  # save code init file
+        st.info(f'save {file_save}')
         view_code_node()
-    else:
-        st.warning('no file selected')
+        st.stop()
 
 if selected_horizontal == 'New':
     if is_file_exist(node):  # node existant ?

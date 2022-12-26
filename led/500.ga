@@ -1,4 +1,12 @@
 node 500
-: test 1 2  3 ;
 
+\ demo Led Pulse
 
+: ledpulse
+    io.h \ led on
+    pause
+    io.l \ led off
+    pause
+    5ms
+    ledpulse
+    
