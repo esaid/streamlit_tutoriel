@@ -361,9 +361,9 @@ if selected_horizontal == 'Home':
 
 
 def view_code_node():
-    code = st.session_state['code']
+    code_ = st.session_state['code']
     # affiche le code dans editeur ace
-    code_edit = st_ace(value=code, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
+    code_edit = st_ace(value=code_, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
     # node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
     # st.session_state['file_node'] = node_file
     st.session_state['code'] = code_edit
@@ -424,6 +424,7 @@ if selected_vertical_menu == 'Setting-communication':
     option_port_serial = st.selectbox('Serial Port selection', list_port)
     st.write('You selected:', option_port_serial)
     st.session_state['serial_port'] = option_port_serial
+    time.sleep(1)
 
 # gestion GA144 nodes
 my_expander = st.expander(label=f"GA144 Nodes {str(file_in_folder()).replace('.ga', '').replace('init', '')} ")
@@ -487,7 +488,7 @@ with expander_compilation:
 expander_send = st.expander(label=f"GA144 send  ")
 
 with expander_send:
-    if st.session_state['send']: #and st.session_state['serial_port']:
+    if st.session_state['send']:
         stdout, stderr = st.columns(2)
         with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
             try:
@@ -506,4 +507,4 @@ with expander_send:
         stdout.text(stdout_text)
         stderr_text = stderr_f.getvalue()
         stderr.text(stderr_text)
-    st.session_state['send'] = False
+        st.session_state['send'] = False
