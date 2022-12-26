@@ -282,7 +282,8 @@ with col1:
                     st.info("file init.ga' selected")
 
                     st.session_state['projet'] = True
-                    directory_project = select_projet.getvalue().decode('utf-8')[2:]  # chemin du projet
+
+                    directory_project = select_projet.getvalue().decode('utf-8').split('\n')[0][2:]  #  1ere ligne , chemin du projet
                     st.session_state['folder_project'] = directory_project
                     name_projet = directory_project[directory_project.rindex('/') + 1:]
                     st.session_state['name_projet'] = name_projet
@@ -452,8 +453,8 @@ with my_expander:
         next(cols).button(label=str(button_node), type=type_, help=help_)
 
 
-
-stdout, stderr = st.columns(2)
+'''
+stdout, stderr = st.columns(1)
 with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
     try:
 
@@ -465,3 +466,4 @@ with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) 
         traceback.print_exc(file=sys.stdout) # or sys.stdout
 stdout_text = stdout_f.getvalue()
 stdout.text(stdout_text)
+'''
