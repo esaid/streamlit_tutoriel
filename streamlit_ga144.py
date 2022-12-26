@@ -15,7 +15,6 @@ import sys
 import subprocess
 import traceback
 
-
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
 Analog = ('117', '617', '717', '713', '709')
 
@@ -86,7 +85,6 @@ def concatenation_in_onefile(new_file, list_files):
                 new_file.write("\n")
 
 
-
 def file_in_folder():
     directory = "\n\r".join(str(st.session_state['folder_project']).split())
     os.chdir(directory)  # path projet
@@ -129,7 +127,6 @@ if 'code' not in st.session_state:
 
 if 'file_node' not in st.session_state:
     st.session_state['file_node'] = ''
-
 
 if 'compilation_file' not in st.session_state:
     st.session_state['compilation_file'] = ''
@@ -283,7 +280,8 @@ with col1:
 
                     st.session_state['projet'] = True
 
-                    directory_project = select_projet.getvalue().decode('utf-8').split('\n')[0][2:]  #  1ere ligne , chemin du projet
+                    directory_project = select_projet.getvalue().decode('utf-8').split('\n')[0][
+                                        2:]  # 1ere ligne , chemin du projet
                     st.session_state['folder_project'] = directory_project
                     name_projet = directory_project[directory_project.rindex('/') + 1:]
                     st.session_state['name_projet'] = name_projet
@@ -365,9 +363,8 @@ def view_code_node():
 # charger fichier *.ga
 if selected_horizontal == 'Load':
     # select_folder_project()
-    loaded_file = st.file_uploader("Choose a file", type='ga' )
+    loaded_file = st.file_uploader("Choose a file", type='ga')
     if loaded_file:
-
         st.session_state['file_node'] = loaded_file.name
         # st.write('file : ', st.session_state['file_node'])
         st.session_state['code'] = loaded_file.getvalue().decode('utf-8')
@@ -453,17 +450,19 @@ with my_expander:
         next(cols).button(label=str(button_node), type=type_, help=help_)
 
 
-'''
-stdout, stderr = st.columns(1)
-with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
-    try:
+expander_compilation = st.expander(label=f"GA144 compilation  ")
 
-        good_process = subprocess.run(["python", "--version"], capture_output=True, text=True)
-        print(read_file(st.session_state['compilation_file']))
-        stdout_f.write(good_process.stdout)
-    except Exception as e:
-        traceback.print_exc()
-        traceback.print_exc(file=sys.stdout) # or sys.stdout
-stdout_text = stdout_f.getvalue()
-stdout.text(stdout_text)
-'''
+with expander_compilation :
+    if st.session_state['compilation_file']:
+        stdout, stderr = st.columns(2)
+        with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
+            try:
+
+                good_process = subprocess.run(["python", "--version"], capture_output=True, text=True)
+                print(read_file(st.session_state['compilation_file']))
+                stdout_f.write(good_process.stdout)
+            except Exception as e:
+                traceback.print_exc()
+                traceback.print_exc(file=sys.stdout)  # or sys.stdout
+        stdout_text = stdout_f.getvalue()
+        stdout.text(stdout_text)
