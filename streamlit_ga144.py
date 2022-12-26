@@ -81,7 +81,6 @@ def concatenation_in_onefile(new_file, list_files):
             with open(name) as f:
                 for line in f:
                     new_file.write(line)
-
                 new_file.write("\n")
 
 
@@ -449,10 +448,9 @@ with my_expander:
             help_ = ''
         next(cols).button(label=str(button_node), type=type_, help=help_)
 
-
 expander_compilation = st.expander(label=f"GA144 compilation  ")
 
-with expander_compilation :
+with expander_compilation:
     if st.session_state['compilation_file']:
         stdout, stderr = st.columns(2)
         with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
