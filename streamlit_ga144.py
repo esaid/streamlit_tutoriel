@@ -17,7 +17,6 @@ import sys
 import subprocess
 import traceback
 
-
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
 Analog = ('117', '617', '717', '713', '709')
 
@@ -133,19 +132,22 @@ if 'file_node' not in st.session_state:
 if 'compilation_file' not in st.session_state:
     st.session_state['compilation_file'] = ''
 
+if 'send' not in st.session_state:
+    st.session_state['send'] = False
+
 if 'serial_port' not in st.session_state:
     st.session_state['serial_port'] = ''
 
 
 def select_folder_project():
     project_folder = "\n\r".join(str(st.session_state['folder_project']).split())
-    #st.write(project_folder)
+    # st.write(project_folder)
     os.chdir(project_folder)  # path projet
 
 
 def select_folder_streamlit():
     streamlit_folder = "\n\r".join(str(st.session_state['folder_streamlit']).split())
-    #st.write(streamlit_folder)
+    # st.write(streamlit_folder)
     os.chdir(streamlit_folder)  # path projet
 
 
@@ -266,6 +268,7 @@ with st.sidebar:
     if selected_horizontal_cpu == "Send":
         st.info(f"Send program to board !", icon="ℹ️")
         bar_progression(5, 0.1)
+        st.session_state['send'] = True
         st.stop()
 
 col1, col2 = st.columns(2)
@@ -464,11 +467,13 @@ with expander_compilation:
         with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
             try:
                 select_folder_streamlit()
-                #ga144compilation_process = subprocess.run(["pwd"], capture_output=True, text=True)
-                ga144compilation_process = subprocess.run(["python", "ga.py", f"{st.session_state['name_projet']}/{st.session_state['name_projet']}.Cga_"], capture_output=True, text=True)
+                # ga144compilation_process = subprocess.run(["pwd"], capture_output=True, text=True)
+                ga144compilation_process = subprocess.run(
+                    ["python", "ga.py", f"{st.session_state['name_projet']}/{st.session_state['name_projet']}.Cga_"],
+                    capture_output=True, text=True)
                 stdout_f.write(ga144compilation_process.stdout)
                 stderr_f.write(ga144compilation_process.stderr)
-                #print(read_file(st.session_state['compilation_file']))
+                # print(read_file(st.session_state['compilation_file']))
                 print(read_file(f"{st.session_state['name_projet']}/{st.session_state['compilation_file']}_"))
 
             except Exception as e:
@@ -478,3 +483,27 @@ with expander_compilation:
         stdout.text(stdout_text)
         stderr_text = stderr_f.getvalue()
         stderr.text(stderr_text)
+
+expander_send = st.expander(label=f"GA144 send  ")
+
+with expander_send:
+    if st.session_state['send']: #and st.session_state['serial_port']:
+        stdout, stderr = st.columns(2)
+        with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
+            try:
+                select_folder_streamlit()
+                # ga144send_process = subprocess.run(["pwd"], capture_output=True, text=True)
+                ga144send_process = subprocess.run(
+                    ["python", "ga.py", f"{st.session_state['name_projet']}/{st.session_state['name_projet']}.Cga_",
+                     "--port", f"{st.session_state['serial_port']}"], capture_output=True, text=True)
+                stdout_f.write(ga144send_process.stdout)
+                stderr_f.write(ga144send_process.stderr)
+
+            except Exception as e:
+                traceback.print_exc()
+                traceback.print_exc(file=sys.stdout)  # or sys.stdout
+        stdout_text = stdout_f.getvalue()
+        stdout.text(stdout_text)
+        stderr_text = stderr_f.getvalue()
+        stderr.text(stderr_text)
+    st.session_state['send'] = False
