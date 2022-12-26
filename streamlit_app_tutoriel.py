@@ -19,15 +19,16 @@ with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) 
         print('Hello World!')
         df = pd.DataFrame({"test": [1,2,3]})
         df.info()
-        good_process = subprocess.run(["ls", "-lah", "."], capture_output=True, text=True)
-        good_process = subprocess.run(["python", "--version"], capture_output=True, text=True)
+        #good_process = subprocess.run(["ls", "-lah", "."], capture_output=True, text=True)
+        #good_process = subprocess.run(["pwd"], capture_output=True, text=True)
+        good_process = subprocess.run(["python", "ga.py", "ledpulse/ledpulse.Cga_","--json"], capture_output=True, text=True)
         stdout_f.write(good_process.stdout)
         stderr_f.write(good_process.stderr)
-        bad_process = subprocess.run(["ls", "wtf"], capture_output=True, text=True)  # Throws stderr error
-        stdout_f.write(bad_process.stdout)
-        stdout_f.write(bad_process.stderr) # Also print in in middle column (most of my usecases i like stdout and stderr)
+        #bad_process = subprocess.run(["ls", "wtf"], capture_output=True, text=True)  # Throws stderr error
+        #stdout_f.write(bad_process.stdout)
+        #stdout_f.write(bad_process.stderr) # Also print in in middle column (most of my usecases i like stdout and stderr)
 
-        x = 1 / 0 # Throws Python Error
+        #x = 1 / 0 # Throws Python Error
 
     except Exception as e:
         traceback.print_exc()

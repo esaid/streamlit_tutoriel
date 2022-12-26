@@ -1,3 +1,4 @@
+import bibliotheque_create
 import json
 import os
 import time
@@ -10,7 +11,7 @@ from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
 from contextlib import redirect_stdout, redirect_stderr
-from bibliotheque_create import generation_code
+
 import io
 import sys
 import subprocess
@@ -138,13 +139,13 @@ if 'serial_port' not in st.session_state:
 
 def select_folder_project():
     project_folder = "\n\r".join(str(st.session_state['folder_project']).split())
-    st.write(project_folder)
+    #st.write(project_folder)
     os.chdir(project_folder)  # path projet
 
 
 def select_folder_streamlit():
     streamlit_folder = "\n\r".join(str(st.session_state['folder_streamlit']).split())
-    st.write(streamlit_folder)
+    #st.write(streamlit_folder)
     os.chdir(streamlit_folder)  # path projet
 
 
@@ -259,7 +260,7 @@ with st.sidebar:
         # new code
         file_ga_ = st.session_state['compilation_file'] + '_'
         directoryBibliotheque = st.session_state['folder_lib']
-        generation_code(code, directoryBibliotheque, file_ga_)
+        bibliotheque_create.generation_code(code, directoryBibliotheque, file_ga_)
         st.stop()
 
     if selected_horizontal_cpu == "Send":
@@ -462,15 +463,18 @@ with expander_compilation:
         stdout, stderr = st.columns(2)
         with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
             try:
-
-                good_process = subprocess.run(["python", "ga.py"], capture_output=True, text=True)
-                ga144compilation_process = subprocess.run(["python", "ga.py",f"{st.session_state['compilation_file']}_", "--json"], capture_output=True, text=True)
-                print(read_file(st.session_state['compilation_file']))
-                print(read_file(f"{st.session_state['compilation_file']}_"))
-                stdout_f.write(good_process.stdout)
+                select_folder_streamlit()
+                #ga144compilation_process = subprocess.run(["pwd"], capture_output=True, text=True)
+                ga144compilation_process = subprocess.run(["python", "ga.py", f"{st.session_state['name_projet']}/{st.session_state['name_projet']}.Cga_"], capture_output=True, text=True)
                 stdout_f.write(ga144compilation_process.stdout)
+                stderr_f.write(ga144compilation_process.stderr)
+                #print(read_file(st.session_state['compilation_file']))
+                print(read_file(f"{st.session_state['name_projet']}/{st.session_state['compilation_file']}_"))
+
             except Exception as e:
                 traceback.print_exc()
                 traceback.print_exc(file=sys.stdout)  # or sys.stdout
         stdout_text = stdout_f.getvalue()
         stdout.text(stdout_text)
+        stderr_text = stderr_f.getvalue()
+        stderr.text(stderr_text)
