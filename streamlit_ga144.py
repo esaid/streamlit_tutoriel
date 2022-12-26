@@ -2,7 +2,6 @@ import json
 import os
 import time
 import glob
-
 import requests
 import serial.tools.list_ports
 import streamlit as st
@@ -64,6 +63,16 @@ def load_lottieurl(url: str):
 def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
         return json.load(f)
+
+
+def concatenation_in_onefile(new_file, list_files):
+    with open(new_file, "w") as new_file:
+        for name in list_files:
+            with open(name) as f:
+                for line in f:
+                    new_file.write(line)
+
+                new_file.write("\n")
 
 
 def file_in_folder():
@@ -226,14 +235,17 @@ with st.sidebar:
 
     if selected_horizontal_cpu == "Compilation":
         st.info(f"compilation {st.session_state['name_projet']}", icon="ℹ️")
-        bar_progression(2, 0.1)
+        bar_progression(5, 0.1)
+        # save name_projet.Cga  (Compilationga)
+        l = file_in_folder()
+        l = l[-1:] + l[:-1] # init.ga premier element pour gerer  require
+        concatenation_in_onefile(st.session_state['name_projet'] + '.Cga', l)
         st.stop()
 
     if selected_horizontal_cpu == "Send":
         st.info(f"Send program to board !", icon="ℹ️")
         bar_progression(5, 0.1)
         st.stop()
-
 
 col1, col2 = st.columns(2)
 
@@ -262,7 +274,6 @@ with col1:
                     time.sleep(2)
                     phcol1.empty()
 
-
 # creer projet
 with col2:
     phcol2 = st.empty()
@@ -275,7 +286,7 @@ with col2:
                 st.warning('Please input a name  project')
                 st.stop()
             master_folder = st.text_input(label='Input Master Folder for projects :  📗   ',
-                                      help=st.session_state['folder_principal'])
+                                          help=st.session_state['folder_principal'])
             if not master_folder:
                 st.warning('Please input a Folder')
                 st.stop()
@@ -286,7 +297,7 @@ with col2:
             st.session_state['name_projet'] = name_projet
             st.success(f"Thank you for inputting a name. {st.session_state['projet']}")
             st.session_state['folder_project'] = os.path.join(st.session_state['folder_principal'],
-                                                          name_projet)  # chemin repertoire du projet
+                                                              name_projet)  # chemin repertoire du projet
             try:
                 os.mkdir(st.session_state['folder_project'])  # creation repertoire , avec nom de projet
             except OSError as errordirectory:
