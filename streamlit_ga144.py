@@ -401,6 +401,7 @@ if selected_horizontal == 'New':
         st.session_state['code'] = code_editeur
         st.stop()  # attente save
 
+
 if selected_vertical_menu == 'About':
     st.info('informational message GA144 program ', icon="ℹ️")
 
