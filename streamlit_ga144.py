@@ -11,7 +11,6 @@ from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
 from itertools import cycle
 from contextlib import redirect_stdout, redirect_stderr
-
 import io
 import sys
 import subprocess
