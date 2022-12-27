@@ -1,0 +1,9 @@
+node 708
+\  Prints the first 15 numbers of the Fibonacci sequence
+\  Run with:
+\    ga fibonacci.ga --port /dev/ttyUSB0
+include 708serial.ga
+: main
+    io b! south a!
+    14 for @ send drop next
+    exit

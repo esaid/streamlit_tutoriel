@@ -89,12 +89,12 @@ def concatenation_in_onefile(new_file, list_files):
 def file_in_folder():
     directory = "\n\r".join(str(st.session_state['folder_project']).split())
     os.chdir(directory)  # path projet
-    return sorted(glob.glob("*.ga"))
+    return sorted(glob.glob("*.node"))
 
 
 def is_file_exist(file_):
     folder = file_in_folder()
-    return file_ + '.ga' in folder
+    return file_ + '.node' in folder
 
 
 # gestion projet
@@ -245,7 +245,7 @@ with st.sidebar:
         bar_progression(5, 0.1)
         # save name_projet.Cga  (Compilationga)
         l = file_in_folder()
-        l = l[-1:] + l[:-1]  # init.ga premier element pour gerer  require
+        l = l[-1:] + l[:-1]  # init.node premier element pour gerer  require
         st.session_state['compilation_file'] = st.session_state['name_projet'] + '.Cga'
         concatenation_in_onefile(st.session_state['compilation_file'], l)
         code = read_file(st.session_state['compilation_file'])
@@ -263,20 +263,20 @@ with st.sidebar:
 
 col1, col2 = st.columns(2)
 
-# col2 creation ou col1 ouvrir un projet le fichier ini.ga ( pour connaitre le repertoire )
+# col2 creation ou col1 ouvrir un projet le fichier ini.node ( pour connaitre le repertoire )
 # charger  projet
 
 with col1:
     phcol1 = st.empty()
     with phcol1.container():
-        # si pas de projet , on sélectionne le repertoire et fichier ini.ga
+        # si pas de projet , on sélectionne le repertoire et fichier ini.node
         if st.session_state['projet'] is False:
             st.header('Load Project :')
-            select_projet = st.file_uploader("Choose a file init.ga in project folder ", type=['ga'])
-            st.warning('Please select a file init.ga')
+            select_projet = st.file_uploader("Choose a file init.node in project folder ", type=['node'])
+            st.warning('Please select a file init.node')
             if select_projet:
-                if select_projet.name == 'init.ga':
-                    st.info("file init.ga' selected")
+                if select_projet.name == 'init.node':
+                    st.info("file init.node' selected")
 
                     st.session_state['projet'] = True
 
@@ -320,10 +320,10 @@ with col2:
                 st.error(f'This is an error  {errordirectory}', icon="🚨")
                 st.stop()
             select_folder_project()
-            st.info(f'Create init.ga file in {name_projet}', icon="ℹ️")
+            st.info(f'Create init.node file in {name_projet}', icon="ℹ️")
             init_text = f"\ {st.session_state['folder_project']}\n"  #
-            # creation du fichier ini.ga
-            with open('init.ga', "w") as f:
+            # creation du fichier ini.node
+            with open('init.node', "w") as f:
                 f.write(init_text)  # save code init file
             time.sleep(1)
             phcol1.empty()
@@ -354,13 +354,13 @@ def view_code_node():
     code_ = st.session_state['code']
     # affiche le code dans editeur ace
     code_edit = st_ace(value=code_, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
-    # node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+    # node_file = f"{code_editeur.title().split()[1]}.node"  # ['Node','117']  '117.node'
     # st.session_state['file_node'] = node_file
     st.session_state['code'] = code_edit
     return code_edit
 
 
-# charger fichier *.ga
+# charger fichier *.node
 if selected_horizontal == 'Load':
     # select_folder_project()
     loaded_file = st.file_uploader("Choose a file", type='ga')
@@ -394,7 +394,7 @@ if selected_horizontal == 'New':
         # code_editeur = view_code_node()
         code_editeur = st_ace(value=f"node {node}\n", language='forth', theme='cobalt', font_size=25, auto_update=True,
                               key='new')
-        node_file = f"{code_editeur.title().split()[1]}.ga"  # ['Node','117']  '117.ga'
+        node_file = f"{code_editeur.title().split()[1]}.node"  # ['Node','117']  '117.node'
         folder_file = f"{st.session_state['folder_project']}/{node_file}".strip()
         st.text(f"Node : {folder_file}")
         st.session_state['file_node'] = node_file
@@ -417,7 +417,7 @@ if selected_vertical_menu == 'Setting-communication':
     time.sleep(1)
 
 # gestion GA144 nodes
-my_expander = st.expander(label=f"GA144 Nodes {str(file_in_folder()).replace('.ga', '').replace('init', '')} ")
+my_expander = st.expander(label=f"GA144 Nodes {str(file_in_folder()).replace('.node', '').replace('init', '')} ")
 
 with my_expander:
     list_node_button = [
