@@ -1,11 +1,14 @@
+import requests
+
 import bibliotheque_create
 import json
 import os
 import time
 import glob
-import requests
 import serial.tools.list_ports
 import streamlit as st
+import streamlit_authenticator as stauth
+import database
 from streamlit_ace import st_ace
 from streamlit_lottie import st_lottie
 from streamlit_option_menu import option_menu
@@ -15,6 +18,36 @@ import io
 import sys
 import subprocess
 import traceback
+
+
+# élargir la page
+st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
+
+# Authentification
+name = ["admin", "emmanuel said"]
+username = ["admin", "esaid"]
+passwords = ["1234", "1234"]  # 1234  1234
+
+# generation fichier si ajout ou modification mot de passe
+# database.generate_hashed_passwords( name, username, passwords)
+
+name, username, hashed_passwords = database.read_hashed_passwords('hashed_pwd.plk')
+# print(f"lecture fichier et decodage {hashed_passwords}")
+authenticator = stauth.Authenticate(name, username, hashed_passwords, 'some_cookie_name', 'some_signature_key',
+                                    cookie_expiry_days=30)
+name, authentication_status, username = authenticator.login('GA144', 'main')
+if authentication_status :
+    st.write(f'Welcome *{username}*')
+    authenticator.logout('Logout', 'main')
+    time.sleep(1)
+elif authentication_status == False:
+    st.error('Username/password is incorrect')
+    st.stop()
+elif authentication_status == None:
+    st.warning('Please enter your username and password')
+    st.stop()
+
+
 
 GPIO = ('600', '500', '217', '317', '417', '517', '715')
 Analog = ('117', '617', '717', '713', '709')
@@ -164,8 +197,6 @@ def file_exist(file_):
     return os.path.exists(file_) and os.stat(file_).st_size == 0
 
 
-# élargir la page
-st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 select_folder_streamlit()
 st.write(st.session_state['folder_lib'])
