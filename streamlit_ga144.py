@@ -24,9 +24,9 @@ import traceback
 st.set_page_config(layout="wide", initial_sidebar_state="collapsed")
 
 # Authentification
-name = ["admin", "emmanuel said"]
-username = ["admin", "esaid"]
-passwords = ["1234", "1234"]  # 1234  1234
+#name = ["admin", "emmanuel said"]
+#username = ["admin", "esaid"]
+#passwords = ["1234", "1234"]  # 1234  1234
 
 # generation fichier si ajout ou modification mot de passe
 # database.generate_hashed_passwords( name, username, passwords)
