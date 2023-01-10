@@ -1,4 +1,4 @@
-from pyutil import inany , fileappend, fileoverwrite, filereplace
+from pyutil import inany, fileappend, fileoverwrite, filereplace
 
 
 def read_file(File_input):
@@ -73,7 +73,6 @@ def code_to_add_to_replace(list_code_, dict_bibliotheque_):
     return code_to_add_, code_to_replace_
 
 
-
 def extraction_code(code_):
     # liste_code , separation des lignes , suppression espaces
     list_code = list(filter(lambda x: x != '', list(map(str.strip, code_.splitlines()))))  # separation lignes
@@ -118,6 +117,7 @@ def code_manipulation(list_code_, dict_bibliotheque_, code, file_ga_):
     # print(f"code a ajouter : {code_to_add}")
     # print(f"code a remplacer: {code_to_replace}")
 
-def generation_code(code, directoryBibliotheque, file_ga_):
-    code_manipulation(extraction_code(code), creation_bibliotheque(extraction_code(code), directoryBibliotheque) , code, file_ga_)
 
+def generation_code(code, directoryBibliotheque, file_ga_):
+    code_manipulation(extraction_code(code), creation_bibliotheque(extraction_code(code), directoryBibliotheque), code,
+                      file_ga_)
