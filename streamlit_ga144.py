@@ -60,7 +60,7 @@ with placeholder.container():
         st.image(database.get_file_drive(database.avatar_drive, st.session_state["avatar"]), width=70,
                  caption=f"Welcome {username}")
         authenticator.logout('Logout', 'main')
-        time.sleep(2)
+        time.sleep(1)
     elif authentication_status == False:
         st.error('Username/password is incorrect')
     elif authentication_status == None:
@@ -87,7 +87,7 @@ with placeholder.container():
                 # st.write(dict_db_user)
                 # st.write(last_username, last_name, last_email, last_password)
                 database.put_database(database.db_user, dict_db_user)  # ecriture dans datatbase user
-                time.sleep(2)
+                time.sleep(1)
                 st.session_state["login"] = True
                 placeholder.empty()
         except Exception as e:
@@ -175,15 +175,16 @@ def is_file_exist(file_):
 
 def select_folder_streamlit():
     streamlit_folder = "\n\r".join(str(st.session_state['folder_streamlit']).split())
-    # st.write(streamlit_folder)
+    # st.write(f"--> folder streamlit {streamlit_folder}")
     os.chdir(streamlit_folder)  # path projet
+    time.sleep(1)
 
 
 def select_Folder_principal():
     if os.path.exists(master_folder):
         st.session_state['folder_principal'] = master_folder
         st.success("Folder validated ")
-        time.sleep(4)
+        time.sleep(1)
     else:
         st.warning('error Folder not found...')
         st.stop()
@@ -202,7 +203,7 @@ def select_folder_project():
 def view_code_node():
     code_ = st.session_state['code']
     # affiche le code dans editeur ace
-    code_edit = st_ace(value=code_, language='forth', theme='cobalt', font_size=25, auto_update=True, key='view')
+    code_edit = st_ace(value=code_, language='forth', theme='cobalt', font_size=25, auto_update=False, key='view')
     # node_file = f"{code_editeur.title().split()[1]}.node"  # ['Node','117']  '117.node'
     # st.session_state['file_node'] = node_file
     st.session_state['code'] = code_edit
@@ -254,7 +255,7 @@ if st.session_state["login"] == True:
         st.session_state['loaded'] = False
 
     select_folder_streamlit()
-    st.write(st.session_state['folder_lib'])
+    # st.write(st.session_state['folder_lib'])
     # charger animation cpu
     cpu_file = "cpu.json"
     dir_cpu_file = f"{st.session_state['folder_streamlit']}{cpu_file}"
@@ -329,7 +330,7 @@ if st.session_state["login"] == True:
 
         if selected_horizontal_cpu == "Compilation":
             st.info(f"compilation {st.session_state['name_projet']}", icon="ℹ️")
-            bar_progression(5, 0.1)
+            bar_progression(10, 0.1)
             # save name_projet.Cga  (Compilationga)
             l = file_in_folder()
             l = l[-1:] + l[:-1]  # init.node premier element pour gerer  require
@@ -344,7 +345,7 @@ if st.session_state["login"] == True:
 
         if selected_horizontal_cpu == "Send":
             st.info(f"Send program to board !", icon="ℹ️")
-            bar_progression(5, 0.1)
+            bar_progression(10, 0.1)
             st.session_state['send'] = True
             st.stop()
 
@@ -374,7 +375,7 @@ if st.session_state["login"] == True:
                         st.session_state['name_projet'] = name_projet
                         # st.write(name_projet)
                         # st.write(file_in_folder())
-                        time.sleep(2)
+                        time.sleep(1)
                         phcol1.empty()
 
     # creer projet
@@ -431,6 +432,7 @@ if st.session_state["login"] == True:
                                       )
 
     if selected_horizontal == 'Restart':
+        select_folder_streamlit()
         st.warning('Press F5 or refresh the web page', icon='⚠')
 
     if selected_horizontal == 'Home':
@@ -538,9 +540,11 @@ if st.session_state["login"] == True:
             next(cols).button(label=str(button_node), type=type_, help=help_)
 
     expander_compilation = st.expander(label=f"GA144 compilation  ")
+    container_compilation = st.container()
 
-    with expander_compilation:
+    with expander_compilation :
         if st.session_state['compilation_file']:
+            # container_compilation.write("GA144 compilation  ")
             stdout, stderr = st.columns(2)
             with redirect_stdout(io.StringIO()) as stdout_f, redirect_stderr(io.StringIO()) as stderr_f:
                 try:
