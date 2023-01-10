@@ -1,7 +1,5 @@
 node 500
-
-\ demo Led Pulse
-
+( demo Led Pulse )
 : ledpulse
     io.h \ led on
     pause
@@ -9,5 +7,3 @@ node 500
     pause
     5ms
     ledpulse
-
-    
