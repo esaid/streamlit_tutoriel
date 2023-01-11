@@ -3,13 +3,16 @@ import sys
 from deta import Deta
 from dotenv import load_dotenv  # python-dotenv
 import pickle
+import streamlit as st
 import streamlit_authenticator as stauth
 
 # --------------------------------------------------
 # initialisation database DETA_KEY
-load_dotenv(".env")  # la DETA_KEY est cache
-DETA_KEY = os.getenv("DETA_KEY")
-deta = Deta(DETA_KEY)
+# load_dotenv(".env")  # la DETA_KEY est cache
+# DETA_KEY = os.getenv("DETA_KEY")
+# deta = Deta(DETA_KEY)
+# Connect to Deta Base with your Project Key
+deta = Deta(st.secrets["deta_key"])
 drive = deta.Drive("simple_drive")
 # --------------------------------------------------
 
